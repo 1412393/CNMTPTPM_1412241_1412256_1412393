@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student management</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="main" class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Student management</h1>
+                <br></br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 text-center">
+                <button id="list-all">List all</button>
+            </div>
+            <div class="col-md-3 text-center">
+            </div>
+            <div class="col-md-3 text-center">
+                <button id="add-stu">Add student</button>
+            </div>
+            <div class="col-md-3 text-center">
+                <button id="edit-stu">Edit student</button>
+            </div>
+        </div>
+        <div class="row">
+            <br></br>
+            <div class="col-md-6">
+                <div id="student-list"></div>
+            </div>
+            <div class="col-md-3 text-center">
+                <form name="addstu">
+                    <p>Student code</p>
+                    <input type="text" id='scode' name="scode">
+                    <br></br>
+                    <p>Student name</p>
+                    <input type="text" id='sname' name="sname">
+                    <br></br>
+                    <p>Student score</p>
+                    <input type="text" id='sscore' name="sscore">
+                </form>
+            </div>
+            <div class="col-md-3 text-center">
+                <form name="editstu">
+                    <p>Student code</p>
+                    <input type="text" id='scode2' name="scode2">
+                    <br></br>
+                    <p>Student name</p>
+                    <input type="text" id='sname2' name="sname2">
+                    <br></br>
+                    <p>Student score</p>
+                    <input type="text" id='sscore2' name="sscore2">
+
+                    <input type="hidden" id='sid' name="sid">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $("#list-all").on("click", function(event) {
+            getAllStudents();
+        });
+
+        $("#add-stu").on("click", function(event) {
+            addStudents();
+        });
+
+        $("#edit-stu").on("click", function(event) {
+            editStudents();
+        });
+
+        function getAllStudents() {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:3000/api/students',
+                dataType: "json",
+                success: function(data) {
+                    console.log(data);
+                    var htmlString = "<ul>";
+                    $.each(data, function(index, item) {
+                        var temp = "\"" + item._id + "\"";
+                        htmlString += "<li> Code: " + item.code + ", Name: " + item.name + ", Score: " + item.score + "  | <a href='#' onClick = 'showStudentsInfo(" + temp + ");'>Edit</a> | <a href='#' onClick = 'deleteStudents(" + temp + ");'>Delete</a> | </li>";
+                    })
+                    htmlString += "</ul>";
+                    $("#student-list").html(htmlString);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ');
+                }
+            });
+        }
+
+        function addStudents() {
+            var sdata = {};
+            sdata.code = addstu.scode.value;
+            sdata.name = addstu.sname.value;
+            sdata.score = addstu.sscore.value;
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:3000/api/students/add',
+                data: JSON.stringify(sdata),
+                contentType: 'application/json',
+                success: function(data) {
+                    var htmlString = "";
+                    var temp = "\"" + data._id + "\"";
+                    htmlString += "<li> Code: " + data.code + ", Name: " + data.name + ", Score: " + data.score + "  | <a href='#' onClick = 'showStudentsInfo(" + temp + ");'>Edit</a> | <a href='#' onClick = 'deleteStudents(" + temp + ");'>Delete</a> | </li>";
+                    $("#student-list ul").append(htmlString);
+                    //document.getElementById("list-all").click();
+                },
+                error: function() {
+                    console.log('Error: ');
+                }
+            });
+        }
+
+
+        function deleteStudents(sid) {
+            var r = confirm("Do you want to delete this student?");
+            if (r == true) {
+                var urll = 'http://localhost:3000/api/students/delete/' + sid;
+                //alert(urll);
+                $.ajax({
+                    type: 'DELETE',
+                    url: urll,
+                    success: function(data) {
+                        document.getElementById("list-all").click();
+                    },
+                    error: function() {
+                        console.log('Error: ');
+                    }
+                });
+            } else {
+
+            }
+        }
+
+
+        function showStudentsInfo(sid) {
+            var urll = 'http://localhost:3000/api/students/show/' + sid;
+            $.ajax({
+                type: 'GET',
+                url: urll,
+                dataType: "json",
+                success: function(data) {
+                    console.log(data);
+                    $("#scode2").val(data.code);
+                    $("#sname2").val(data.name);
+                    $("#sscore2").val(data.score);
+                    $("#sid").val(data._id);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ');
+                }
+            });
+        }
+
+        function editStudents() {
+            var sdata = {};
+            sdata.code = editstu.scode2.value;
+            sdata.name = editstu.sname2.value;
+            sdata.score = editstu.sscore2.value;
+            var urll = 'http://localhost:3000/api/students/edit/' + editstu.sid.value;
+            $.ajax({
+                type: 'PUT',
+                url: urll,
+                data: JSON.stringify(sdata),
+                contentType: 'application/json',
+                success: function(data) {
+                    document.getElementById("list-all").click();
+                },
+                error: function() {
+                    console.log('Error: ');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

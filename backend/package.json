@@ -1,0 +1,39 @@
+{
+  "name": "svapi",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "acl": "^0.4.10",
+    "body-parser": "~1.17.1",
+    "chai": "~1.8.1",
+    "compression": "^1.6.2",
+    "connect-flash": "^0.1.1",
+    "connect-multiparty": "^2.0.0",
+    "cookie-parser": "~1.4.3",
+    "date-and-time": "^0.5.0",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "express-session": "^1.15.3",
+    "express-validator": "^3.2.0",
+    "fs": "0.0.1-security",
+    "handlebars-helper-equal": "^1.0.0",
+    "handlebars-helpers": "^0.8.2",
+    "hbs": "~4.0.1",
+    "helmet": "^3.1.0",
+    "mocha": "~1.14.0",
+    "mongoose": "^4.9.9",
+    "mongoose-paginate": "^5.0.3",
+    "mongoose-validator": "^1.3.2",
+    "morgan": "~1.8.1",
+    "multer": "^1.3.0",
+    "nodemailer": "~0.7.1",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^1.0.0",
+    "serve-favicon": "~2.4.2",
+    "should": "~2.1.0"
+  }
+}
