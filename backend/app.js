@@ -10,6 +10,7 @@ var compression = require('compression');
 var helmet = require('helmet');
 
 var index = require('./routes/index');
+var user = require('./routes/user');
 var mongoose = require('mongoose');
 
 var app = express();
@@ -54,7 +55,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+var User = require('./models/user');
 /*passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());*/
@@ -80,6 +81,7 @@ app.use(function(req, res, next) {
 
 app.use(compression()); //Compress all routes
 app.use('/', index);
+app.use('/user', user);
 app.use(helmet());
 
 // catch 404 and forward to error handler
