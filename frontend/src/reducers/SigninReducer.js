@@ -1,16 +1,16 @@
 const initState = {
-  isLogging : false;
-  logged : false;
-  result: [];
+  isLogging : false,
+  logged : false,
+  result: []
 }
 
-const mainReducer = (state = initState, action) => {
+const signinReducer = (state = initState, action) => {
   switch(action.type){
-    case "LOGIN":
+    case "SIGNIN":
       return{...state, isLogging: true}
-    case "LOGIN_SUCCESS":
+    case "SIGNIN_SUCCESS":
       return{...state, logged: true, isLogging: false, result: state.result.concat(action.data)}
-    case "LOGIN_FAIL":
+    case "SIGNIN_FAIL":
       return{...state, logged: true, isLogging: false};
 
     default:
@@ -19,4 +19,4 @@ const mainReducer = (state = initState, action) => {
 }
 
 
-export default mainReducer;
+export default signinReducer;

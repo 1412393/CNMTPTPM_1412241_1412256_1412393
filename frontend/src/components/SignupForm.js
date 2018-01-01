@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
+import * as actions from '../actions/SignupActions.js'
 
 
 class SignUp extends Component {
@@ -18,5 +20,10 @@ class SignUp extends Component {
     );
   }
 }
+const mapStateToProps = (state) =>{
+    return {
 
-export default SignUp;
+    }
+}
+
+export default connect(mapStateToProps)(SignUp);
