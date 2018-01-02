@@ -114,16 +114,19 @@ color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-ali
 }
 .signup-form input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgba(255,255,255,0.2); }
 
-.login-form, .signup-form{
+.login-form, .signup-form, .membersite-form{
   -webkit-animation: fade 0.8s ease ; /* Safari 4.0 - 8.0 */
   animation: fade 0.8s ease ;
 }
 
 .membersite-form{
   position: absolute;
-  width: 80%;
+  -webkit-flex: auto; /* Safari 6.1+ */
+  -ms-flex: auto; /* IE 10 */
+  flex: auto;
+  width: 90%;
   height: 90%;
-  background-color: grey;
-  border-radius: 2%;
-  margin-top: 10%;
+  background-color: #deeddc;
+  border-radius: 1%;
+  margin-top: auto;
 }
