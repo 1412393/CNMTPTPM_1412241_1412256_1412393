@@ -125,12 +125,27 @@ color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-ali
 
 .membersite-form{
   position: absolute;
-  -webkit-flex: auto; /* Safari 6.1+ */
-  -ms-flex: auto; /* IE 10 */
-  flex: auto;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.membersite-form .info-form{
+  position: absolute;
+  border: 1px solid #d2d4d8;
   width: 90%;
-  height: 90%;
-  background-color: #deeddc;
-  border-radius: 1%;
-  margin-top: auto;
+  height: 20%;
+  top: 0;
+  margin-top: 2%;
+  margin-left: 5%;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+.membersite-form .info-form .info-image{
+  background: url("user.png");
+  background-size: 100% 100%;
+  width: 8%;
+  height: 70%;
+  margin-left: 5%;
 }

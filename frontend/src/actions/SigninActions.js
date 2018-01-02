@@ -12,13 +12,14 @@ function signinFail(message){
 }
 
 export function signin(email,password){
+  const content = {
+    email: email,
+    password: password,
+  }
   return dispatch => {
     dispatch(signinStart())
     if(email && password){
-    axios.get(apiUrl +'user/signin', {
-        email: email,
-        password: password,
-    })
+    axios.get(apiUrl +'user/signin', {content})
     .then(response => {
       if(response && response.data !== "failed"){
         var data = response.data;

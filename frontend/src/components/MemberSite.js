@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import * as actions from '../actions/InitData.js'
 import {connect} from 'react-redux';
-import CircularProgress from 'material-ui/CircularProgress';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Paper from 'material-ui/Paper';
 
+const style = {
+  height: 100,
+  width: 100,
+  margin: 20,
+  textAlign: 'center',
+  display: 'inline-block',
+};
 
 
 class MemberSite extends Component {
@@ -14,10 +21,10 @@ class MemberSite extends Component {
 
   render() {
     return (
-      <div className="loading">
-      <MuiThemeProvider>
-        <CircularProgress size={80} thickness={7} max={100} min={1} />
-      </MuiThemeProvider>
+      <div className="membersite-form">
+        <div className="info-form">
+            <div className="info-image"></div>
+        </div>
       </div>
     );
   }

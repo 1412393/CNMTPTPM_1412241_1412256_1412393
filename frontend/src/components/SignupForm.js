@@ -4,6 +4,16 @@ import * as actions from '../actions/SignupActions.js'
 
 
 class SignUp extends Component {
+  handleSignup = () =>{
+      const name = this.refs.name.value;
+      const email = this.refs.email.value;
+      const password = this.refs.password.value;
+      const confirm_password = this.refs.confirm_password.value;
+      if(name  && email && password && confirm_password && password === confirm_password)
+        this.props.dispatch(actions.signup(name,email,password))
+  }
+
+
   render() {
     return (
       <div className= "signup-form">
@@ -22,7 +32,10 @@ class SignUp extends Component {
 }
 const mapStateToProps = (state) =>{
     return {
-
+      isCreating : state.signupData.isCreating,
+      created : state.signupData.created,
+      message: state.signupData.message,
+      result: state.signupData.result
     }
 }
 

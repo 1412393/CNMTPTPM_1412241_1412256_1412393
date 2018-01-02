@@ -8,6 +8,7 @@ import store from './store.js';
 import SignIn from './components/SigninForm.js';
 import SignUp from './components/SignupForm.js';
 import MemberSite from './components/MemberSite.js';
+
 class App extends Component {
   render() {
     return (

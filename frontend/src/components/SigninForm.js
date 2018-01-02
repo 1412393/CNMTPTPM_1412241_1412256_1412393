@@ -2,14 +2,23 @@ import React, { Component } from 'react';
 import * as actions from '../actions/SigninActions.js'
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
+import LoadingPage from './LoadingPage.js';
 
 class SignIn extends Component {
 
   handleSignin = () =>{
-    this.props.dispatch(actions.signin);
+    const email = this.refs.email.value;
+    const password = this.refs.password.value;
+    if(email && password)
+    this.props.dispatch(actions.signin(email,password));
   }
 
   render() {
+
+    if(this.props.isLogging === true)
+      return(
+        <LoadingPage/>
+      )
     return (
       <div className= "login-form">
             <h2>Login</h2>
@@ -25,7 +34,9 @@ class SignIn extends Component {
 }
 const mapStateToProps = (state) =>{
     return {
-
+      isLogging : state.signinData.isLogging,
+      logged : state.signinData.logged,
+      result : state.signinData.result
     }
 }
 

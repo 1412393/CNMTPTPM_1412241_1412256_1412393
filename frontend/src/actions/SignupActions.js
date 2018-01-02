@@ -12,15 +12,16 @@ function signupFail(message){
 }
 
 export function signup(name,email,password){
+  const content = {
+    success: false,
+    email: email,
+    password: password,
+    name: name,
+  }
   return dispatch => {
     dispatch(signupStart())
     if(name && password && email){
-      axios.post(apiUrl + 'user/signup', {
-          success: false,
-          email: email,
-          password: password,
-          name: name,
-      })
+      axios.post(apiUrl + 'user/signup', {content})
       .then(response=> {
         if(response && response.data !== "exist"){
           dispatch(signupSuccess(response.data))
