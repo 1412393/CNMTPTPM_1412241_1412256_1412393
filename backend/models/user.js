@@ -20,7 +20,10 @@ var UserSchema = Schema({
     isVerified: { type: Boolean, default: false },
     password: String,
     passwordResetToken: String,
-    passwordResetExpires: Date
+    passwordResetExpires: Date,
+    address:{ address: String, privateKey: String, publicKey:String },
+    available_coins: Number,
+    actual_coins: Number
 });
 
 /*UserSchema.methods.comparePassword = function (candidatePassword, cb) {

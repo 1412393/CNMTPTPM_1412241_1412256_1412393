@@ -3,8 +3,15 @@ var User = require('../models/user');
 var Token = require('../models/token');
 var passport = require('passport');
 var crypto = require('crypto');
+var bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
+var utils = require('../services/utils')
 
+const _ = require('lodash');
+const bitInt = require('big-integer');
+const ursa = require('ursa');
+
+const HASH_ALGORITHM = 'sha256';
 
 
 exports.login = function(req, res, next) {
@@ -20,8 +27,9 @@ exports.login = function(req, res, next) {
 
     User.findOne({ email: req.body.content.email }, function(err, user) {
         if (!user) return res.json({ msg: "notexist" });
-        var isMatch = false;
-        if (req.body.content.password=== user.password) isMatch = true;
+        var isMatch = bcrypt.compareSync(req.body.content.password, user.password);
+
+        //if (req.body.content.password=== user.password) isMatch = true;
         //user.comparePassword(req.body.content.password, function (err, isMatch) {
             if (!isMatch) return res.json({ msg: "wrong" });
 
@@ -30,7 +38,7 @@ exports.login = function(req, res, next) {
 
             // Login successful, write token, and send back user
             //res.json({ msg: "success", token: generateToken(user), user: user });
-            res.json({ msg: "success",  user: user });
+            res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address } });
        // });
     });
 
@@ -39,7 +47,8 @@ exports.login = function(req, res, next) {
 }
 
 exports.register = function(req, res, next) {
-
+    var address = utils.generateAddress();
+    //console.log(address);
     req.assert('content.name', 'Name cannot be blank').notEmpty();
     req.assert('content.email', 'Email is not valid').isEmail();
     req.assert('content.email', 'Email cannot be blank').notEmpty();
@@ -58,7 +67,14 @@ exports.register = function(req, res, next) {
         if (user) return res.json({ msg: "existed" });
 
         // Create and save the user
-        user = new User({ name: req.body.content.name, email: req.body.content.email, password: req.body.content.password });
+        user = new User({
+            name: req.body.content.name,
+            email: req.body.content.email,
+            password: bcrypt.hashSync(req.body.content.password, bcrypt.genSaltSync(8), null),
+            address: address,
+            available_coins: 0,
+            actual_coins: 0});
+
         user.save(function (err) {
             if ( err) return res.json({ msg: "existed" });
             // Create a verification token for this user
@@ -91,6 +107,9 @@ exports.register = function(req, res, next) {
 
 
 }
+
+
+
 
 
 exports.confirmation = function(req, res, next) {
