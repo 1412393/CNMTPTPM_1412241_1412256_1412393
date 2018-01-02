@@ -59,12 +59,12 @@ class MemberSite extends Component {
         <div className="info-form">
             <div className="info-image"></div>
             <div className="address-data">
-              <h6 id="email">khanhhaquang@gmail.com</h6>
-              <h6 id="address">Your address : {this.state.address}</h6>
+              <h6 id="email">{this.props.data.user.email}</h6>
+              <h6 id="address">Your address : {this.props.data.user.address}</h6>
             </div>
             <div className="kcoin-data">
-              <h6 id="actual">Actual KCoin: 10000</h6>
-              <h6 id="available">Available KCoin: 8000</h6>
+              <h6 id="actual">Actual KCoin: {this.props.data.user.actual_coins}</h6>
+              <h6 id="available">Available KCoin: {this.props.data.user.available_coins}</h6>
             </div>
         </div>
         <div className="trading-form">
@@ -87,10 +87,7 @@ class MemberSite extends Component {
                     <TableRowColumn>John Smith</TableRowColumn>
                     <TableRowColumn>Employed</TableRowColumn>
                   </TableRow>
-                  <TableRow>
-                    <TableRowColumn>Randal White</TableRowColumn>
-                    <TableRowColumn>Unemployed</TableRowColumn>
-                  </TableRow>
+
                 </TableBody>
               </Table>
               </div>
@@ -122,6 +119,7 @@ class MemberSite extends Component {
 
 const mapStateToProps = (state) =>{
     return {
+      data: state.signinData.result
     }
 }
 

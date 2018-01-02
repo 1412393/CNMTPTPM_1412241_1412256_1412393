@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import * as actions from '../actions/SignupActions.js'
 import LoadingPage from './LoadingPage.js';
 import { Redirect } from 'react-router-dom'
-
+import Confirm from './ConfirmPage.js'
 
 class SignUp extends Component {
   handleSignup = () =>{
@@ -19,7 +19,7 @@ class SignUp extends Component {
   render() {
     if(this.props.created === true){
       return(
-        <Redirect to='/membersite'/>
+        <Confirm/>
       )
     }
     if(this.props.isCreating === true)
