@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
-import * as actions from '../actions/InitData.js'
-import {connect} from 'react-redux';
 import CircularProgress from 'material-ui/CircularProgress';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-
-
-class MemberSite extends Component {
-
-  handleSignin = () =>{
-    //this.props.dispatch(actions.signin);
-  }
+export default class MemberSite extends Component {
 
   render() {
     return (
@@ -22,11 +14,3 @@ class MemberSite extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) =>{
-    return {
-
-    }
-}
-
-export default connect(mapStateToProps)(MemberSite);

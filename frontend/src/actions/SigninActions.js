@@ -15,11 +15,9 @@ export function signin(email,password){
   return dispatch => {
     dispatch(signinStart())
     if(email && password){
-    axios.get(apiUrl +'signin', {
-      params:{
+    axios.get(apiUrl +'user/signin', {
         email: email,
         password: password,
-      }
     })
     .then(response => {
       if(response && response.data !== "failed"){

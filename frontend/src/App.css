@@ -119,6 +119,10 @@ color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-ali
   animation: fade 0.8s ease ;
 }
 
+.loading{
+  margin-top: 20%
+}
+
 .membersite-form{
   position: absolute;
   -webkit-flex: auto; /* Safari 6.1+ */
