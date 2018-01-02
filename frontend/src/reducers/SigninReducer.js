@@ -1,7 +1,7 @@
 const initState = {
   isLogging : false,
   logged : false,
-  result: []
+  result: {}
 }
 
 const signinReducer = (state = initState, action) => {
@@ -9,7 +9,7 @@ const signinReducer = (state = initState, action) => {
     case "SIGNIN":
       return{...state, isLogging: true}
     case "SIGNIN_SUCCESS":
-      return{...state, logged: true, isLogging: false, result: state.result.concat(action.data)}
+      return{...state, logged: true, isLogging: false, result: action.data}
     case "SIGNIN_FAIL":
       return{...state, logged: true, isLogging: false};
 

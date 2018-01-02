@@ -12,7 +12,10 @@ class SignIn extends Component {
     if(email && password)
     this.props.dispatch(actions.signin(email,password));
   }
-
+  componentDidMount(){
+    if(sessionStorage.email)
+    this.refs.email.value = sessionStorage.email;
+  }
   render() {
 
     if(this.props.isLogging === true)

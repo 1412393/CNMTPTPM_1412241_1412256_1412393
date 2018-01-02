@@ -5,7 +5,7 @@ import signupReducer from './SignupReducer.js';
 
 const rootReducer = combineReducers({
   signinData : signinReducer,
-  signupData : signupReducer
+  signupData : signupReducer,
 })
 
 export default rootReducer;

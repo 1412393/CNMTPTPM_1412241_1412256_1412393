@@ -20,13 +20,14 @@ export function signup(name,email,password){
   }
   return dispatch => {
     dispatch(signupStart())
-    if(name && password && email){
       axios.post(apiUrl + 'user/signup', {content})
       .then(response=> {
-        if(response && response.data !== "exist"){
+        const data = response.data;
+        if(response && data.msg === "success"){
           dispatch(signupSuccess(response.data))
-          window.location = '/';
-          sessionStorage.email = response.data.email;
+          console.log(data);
+          sessionStorage.email = email;
+          window.alert(data.msg);
         }
         else
           dispatch(signupFail("This username has been used !"))
@@ -35,9 +36,5 @@ export function signup(name,email,password){
         dispatch(signupFail("Please fill right information !"))
         console.log(error);
       });
-    }
-    else{
-      dispatch(signupFail("Please fill right information !"))
-    }
   }
 }

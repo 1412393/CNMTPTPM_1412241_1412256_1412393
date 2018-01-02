@@ -2,17 +2,17 @@ const initState = {
   isCreating : false,
   created : false,
   message: "",
-  result: []
+  result: {}
 }
 
 const signupReducer = (state = initState, action) => {
   switch(action.type){
     case "SIGNUP":
-      return{...state, isLogging: true}
+      return{...state, isCreating: true}
     case "SIGNUP_SUCCESS":
-      return{...state, logged: true, isLogging: false, result: state.result.concat(action.data)}
+      return{...state, created: true, isCreating: false, result: action.data}
     case "SIGNUP_FAIL":
-      return{...state, logged: true, isLogging: false, message: action.message};
+      return{...state, created: false, isCreating: false, message: action.message};
 
     default:
       return state;

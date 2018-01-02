@@ -18,27 +18,23 @@ export function signin(email,password){
   }
   return dispatch => {
     dispatch(signinStart())
-    if(email && password){
-    axios.get(apiUrl +'user/signin', {content})
+    axios.post(apiUrl +'user/signin', {content})
     .then(response => {
-      if(response && response.data !== "failed"){
-        var data = response.data;
-        sessionStorage.email = data.email;
-        sessionStorage.isLogged = true;
+      const data = response.data;
+      if(response && data.user){
+        console.log(data)
+        // sessionStorage.email = data.email;
+        // sessionStorage.isLogged = true;
         dispatch(signinSuccess(data))
-        window.location = '/membersite';
+        // window.location = '/membersite';
       }
       else{
-        dispatch(signinFail("Invalid username or password"))
+        dispatch(signinFail(data.msg))
       }
     })
     .catch(error => {
       console.log(error);
-      dispatch(signinFail("Invalid username or password"))
+      dispatch(signinFail("Something went wrong"))
     });
-  }
-  else{
-    dispatch(signinFail("Invalid username or password"))
-  }
   }
 }
