@@ -15,8 +15,8 @@ class App extends Component {
       <Provider store={store}>
         <Switch>
           <Route exact path='/' component={SignIn}/>
-          <Route path='/signup' component={SignUp}/>
           <Route path='/membersite' component={MemberSite}/>
+          <Route path='/signup' component={SignUp}/>
         </Switch>
       </Provider>
     )

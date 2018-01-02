@@ -11,7 +11,7 @@ const signinReducer = (state = initState, action) => {
     case "SIGNIN_SUCCESS":
       return{...state, logged: true, isLogging: false, result: action.data}
     case "SIGNIN_FAIL":
-      return{...state, logged: true, isLogging: false};
+      return{...state, logged: false, isLogging: false};
 
     default:
       return state;

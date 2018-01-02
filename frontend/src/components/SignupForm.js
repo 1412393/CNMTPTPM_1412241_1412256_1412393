@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../actions/SignupActions.js'
+import LoadingPage from './LoadingPage.js';
+import { Redirect } from 'react-router-dom'
 
 
 class SignUp extends Component {
@@ -15,6 +17,15 @@ class SignUp extends Component {
 
 
   render() {
+    if(this.props.created === true){
+      return(
+        <Redirect to='/membersite'/>
+      )
+    }
+    if(this.props.isCreating === true)
+      return(
+        <LoadingPage/>
+      )
     return (
       <div className= "signup-form">
             <h2>Sign Up</h2>

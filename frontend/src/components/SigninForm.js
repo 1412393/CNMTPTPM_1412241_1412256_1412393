@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from '../actions/SigninActions.js'
 import {connect} from 'react-redux';
-import { Link } from 'react-router-dom'
+import { Link,Redirect } from 'react-router-dom'
 import LoadingPage from './LoadingPage.js';
 
 class SignIn extends Component {
@@ -17,7 +17,11 @@ class SignIn extends Component {
     this.refs.email.value = sessionStorage.email;
   }
   render() {
-
+    if(this.props.logged === true){
+      return(
+        <Redirect to='/membersite'/> 
+      )
+    }
     if(this.props.isLogging === true)
       return(
         <LoadingPage/>
