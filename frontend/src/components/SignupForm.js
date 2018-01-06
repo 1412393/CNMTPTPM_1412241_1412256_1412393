@@ -17,7 +17,7 @@ class SignUp extends Component {
 
 
   render() {
-    if(this.props.created === true){
+    if(1){
       return(
         <Confirm/>
       )
@@ -46,7 +46,9 @@ const mapStateToProps = (state) =>{
       isCreating : state.signupData.isCreating,
       created : state.signupData.created,
       message: state.signupData.message,
-      result: state.signupData.result
+      result: state.signupData.result,
+      isResending: state.resendData.isResending,
+      resent: state.resendData.resent
     }
 }
 
