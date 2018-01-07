@@ -26,7 +26,7 @@ var session = require('express-session');
 //-----------------------------------------------------------
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
+var appp = require('./services/app')
 
 
 var mongoDB = 'mongodb://admin:admin@cluster0-shard-00-00-qfoqg.mongodb.net:27017,cluster0-shard-00-01-qfoqg.mongodb.net:27017,cluster0-shard-00-02-qfoqg.mongodb.net:27017/wallet?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin';
@@ -127,7 +127,7 @@ request({
 }, function (error, response, body){
     console.log(response);
 });*/
-
+appp.GetALlBlock();
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
