@@ -75,16 +75,15 @@ class MemberSite extends Component {
 
   render() {
     return (
-      <div className="membersite-form">
+      <div className="adminsite-form">
         <div className="info-form">
             <div className="info-image"></div>
             <div className="address-data">
-              <h6 id="email">{"this.props.data.user.email"}</h6>
-              <h6 id="address">Your address : {"this.props.data.user.address"}</h6>
+              <h4>WELCOME ADMIN</h4>
             </div>
             <div className="kcoin-data">
-              <h6 id="actual">Actual KCoin: {"this.props.data.user.actual_coins"}</h6>
-              <h6 id="available">Available KCoin: {"this.props.data.user.available_coins"}</h6>
+              <h6 id="actual">Actual KCoin: {"SERVER"}</h6>
+              <h6 id="available">Available KCoin: {"SERVER"}</h6>
             </div>
         </div>
         <div className="trading-form">
@@ -138,18 +137,6 @@ class MemberSite extends Component {
             </Tab>
           </Tabs>
           </MuiThemeProvider>
-        </div>
-        <div className="add-form">
-        <MuiThemeProvider>
-          <Paper style={stylePaper} zDepth={4}>
-            <h4> Add transaction </h4>
-            <input ref="address" type="text" id="address" name="address" placeholder="Address.."/>
-            <input ref="kcoin" type="number" id="kcoin" name="kcoin" placeholder="Kcoin.."/>
-            <div className="add-btn">
-              <RaisedButton onClick={this.handleAdd} label="Add" secondary={true} style={style} />
-            </div>
-          </Paper>
-        </MuiThemeProvider>
         </div>
         <div className="logout-btn">
         <MuiThemeProvider>

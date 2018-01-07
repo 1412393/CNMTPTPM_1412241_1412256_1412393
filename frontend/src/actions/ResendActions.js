@@ -21,16 +21,19 @@ export function resend(email){
         console.log(data)
         // sessionStorage.email = data.email;
         // sessionStorage.isLogged = true;
-        dispatch(resendSuccess(data))
+        dispatch(resendSuccess(data));
+        window.alert("An verification email has been resent !");
         // window.location = '/membersite';
       }
       else{
-        dispatch(resendFail(data.msg))
+        dispatch(resendFail(data.msg));
+        window.alert("Resent fail !");
       }
     })
     .catch(error => {
       console.log(error);
-      dispatch(resendFail("Something went wrong"))
+      dispatch(resendFail("Something went wrong"));
+      window.alert("Resent fail !");
     });
   }
 }

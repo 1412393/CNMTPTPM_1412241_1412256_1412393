@@ -17,7 +17,7 @@ class SignUp extends Component {
 
 
   render() {
-    if(1){
+    if(this.props.created === true){
       return(
         <Confirm/>
       )
