@@ -47,7 +47,7 @@ exports.login = function(req, res, next) {
 }
 
 exports.register = function(req, res, next) {
-    var address = utils.generateAddress();
+
     //console.log(address);
     req.assert('content.name', 'Name cannot be blank').notEmpty();
     req.assert('content.email', 'Email is not valid').isEmail();
@@ -65,7 +65,7 @@ exports.register = function(req, res, next) {
 
         // Make sure user doesn't already exist
         if (user) return res.json({ msg: "existed" });
-
+        var address = utils.generateAddress();
         // Create and save the user
         user = new User({
             name: req.body.content.name,
