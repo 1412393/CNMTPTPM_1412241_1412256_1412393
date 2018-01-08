@@ -108,7 +108,7 @@ exports.sendCoin = function(req, res, next) {
 }
 
 exports.PostTransaction = async function(sender, receivers ){
-    //await CheckTran();
+    await CheckTran();
     User.findOne({ 'address.address': sender.address}, function(err, user) {
         if (err) {
         }
@@ -289,3 +289,6 @@ exports.Confirmation = function(req, res, next) {
     });
 
 }
+
+
+exports.Cancle = function(req, res, next) {}

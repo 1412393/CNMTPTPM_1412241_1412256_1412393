@@ -9,7 +9,7 @@ var transactionController = require("../controllers/transactionController");
 
 router.post('/send', transactionController.sendCoin);
 router.get('/confirmation/:id', transactionController.Confirmation);
-
+router.get('/cancle/:id', transactionController.Cancle);
 
 
 
