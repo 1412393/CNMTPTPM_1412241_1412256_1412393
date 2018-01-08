@@ -1,10 +1,14 @@
 const initState = {
     isSending : false,
     sent : false,
-    result: {}
+    result: {},
+
+    isUpdating: false,
+    updated: false,
+    data: {}
   }
   
-  const resendReducer = (state = initState, action) => {
+  const memberReducer = (state = initState, action) => {
     switch(action.type){
       case "SEND":
         return{...state, isSending: true}
@@ -12,12 +16,17 @@ const initState = {
         return{...state, sent: true, isSending: false, result: action.data}
       case "SEND_FAIL":
         return{...state, sent: false, isSending: false};
-  
+      case "UPDATE":
+        return{...state, isUpdating: true}
+      case "UPDATE_SUCCESS":
+        return{...state, updated: true, isUpdating: false, data: action.data}
+      case "UPDATE_FAIL":
+        return{...state, updated: false, isUpdating: false};
       default:
         return state;
     }
   }
   
   
-  export default resendReducer;
+  export default memberReducer;
   

@@ -15,6 +15,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Pagination from 'material-ui-pagination';
+import { Redirect } from 'react-router-dom'
 
 
 const stylePaper = {
@@ -62,6 +63,12 @@ class AdminSite extends Component {
   }
 
   render() {
+    if(!this.props.logged){
+      return(
+      <Redirect to="/" />
+      )
+    }
+
     const {amount_actual_coin,amount_available_coin,amount_user} = this.props.data.info !== undefined ? this.props.data.info : "";
     const users = this.props.data.users !== undefined ? this.props.data.users : [];
     const history = this.props.data.localhtr !== undefined ? this.props.data.localhtr : [];
@@ -102,7 +109,7 @@ class AdminSite extends Component {
                       <TableRowColumn>{data.actual_coins}</TableRowColumn>
                       <TableRowColumn>{data.available_coins}</TableRowColumn>
                       <TableRowColumn>{data.email}</TableRowColumn>
-                      <TableRowColumn>{data.email}</TableRowColumn>
+                      <TableRowColumn>{data.address.address}</TableRowColumn>
                     </TableRow>
                     )
                   })}
@@ -166,6 +173,8 @@ class AdminSite extends Component {
 
 const mapStateToProps = (state) =>{
     return {
+      isLogging : state.signinData.isLogging,
+      logged : state.signinData.logged,
       data: state.adminData.result
     }
 }

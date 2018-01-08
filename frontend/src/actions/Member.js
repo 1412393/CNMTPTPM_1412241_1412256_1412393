@@ -14,26 +14,57 @@ function sendFail(message){
 export function send(content){
   return dispatch => {
     dispatch(sendStart())
-    axios.post(apiUrl +'user/send', {content})
+    axios.post(apiUrl +'transaction/send', {content})
     .then(response => {
       const data = response.data;
       if(response && data.msg === "success"){
         console.log(data)
-        // sessionStorage.email = data.email;
-        // sessionStorage.isLogged = true;
         dispatch(sendSuccess(data));
-        window.alert("An verification email has been resent !");
-        // window.location = '/membersite';
       }
       else{
         dispatch(sendFail(data.msg));
-        window.alert("Resent fail !");
       }
     })
     .catch(error => {
       console.log(error);
       dispatch(sendFail("Something went wrong"));
-      window.alert("Resent fail !");
     });
   }
 }
+
+
+function updateStart(){
+    return {type : "UPDATE"}
+  }
+  function updateSuccess(data){
+    return {type : "UPDATE_SUCCESS", data: data}
+  }
+  function updateFail(message){
+    return {type : "UPDATE_FAIL", message: message}
+  }
+  
+  export function update(email){
+    const content = {
+        email: email
+    }
+    return dispatch => {
+      dispatch(updateStart())
+      axios.post(apiUrl +'user/update', {content})
+      .then(response => {
+        const data = response.data;
+        if(response && data.msg === "success"){
+          console.log(data)
+
+          dispatch(updateSuccess(data));
+
+        }
+        else{
+          dispatch(updateFail(data.msg));
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch(updateFail("Something went wrong"));
+      });
+    }
+  }

@@ -158,13 +158,25 @@ color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-ali
   margin-left: 5%;
 }
 
-.info-form .address-data{
+.membersite-form .info-form .address-data{
   display: inline-block;
   margin-left: 5%;
   color: rgb(0, 188, 212);
 }
 
-.info-form .kcoin-data{
+.membersite-form .info-form .kcoin-data{
+  display: inline-block;
+  margin-left: 15%;
+  color: rgb(0, 188, 212);
+}
+
+.adminsite-form .info-form .address-data{
+  display: inline-block;
+  margin-left: 5%;
+  color: rgb(0, 188, 212);
+}
+
+.adminsite-form .info-form .kcoin-data{
   display: inline-block;
   margin-left: 25%;
   color: rgb(0, 188, 212);
