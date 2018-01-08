@@ -16,7 +16,7 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var UserSchema = Schema({
     name: String,
     email: { type: String, unique: true },
-    roles: [{ type: 'String' }],
+    roles: { type: String },
     isVerified: { type: Boolean, default: false },
     password: String,
     passwordResetToken: String,
