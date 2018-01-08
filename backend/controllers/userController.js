@@ -38,7 +38,7 @@ exports.login = function(req, res, next) {
 
             // Login successful, write token, and send back user
             //res.json({ msg: "success", token: generateToken(user), user: user });
-            res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address } });
+            res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles} });
        // });
     });
 

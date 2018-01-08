@@ -61,15 +61,15 @@ app.use(passport.session());
 var User = require('./models/user');
 
 
-const WebSocket = require('ws');
+//const WebSocket = require('ws');
 
-const ws = new WebSocket('wss://api.kcoin.club/');
+//const ws = new WebSocket('wss://api.kcoin.club/');
 
-ws.onopen = function () {
-    console.log('connected');
-};
+//ws.onopen = function () {
+ //   console.log('connected');
+//};
 //var await = require('await');
-ws.onmessage = async function (data) {
+/*ws.onmessage = async function (data) {
     console.log('incoming data', data.data);
     let d = JSON.parse(data.data);
     if (d.type === "block"){
@@ -79,7 +79,7 @@ ws.onmessage = async function (data) {
         await transaction.AddTransaction(d.data);
     }
 };
-
+*/
 
 
 //appp.InitData();
