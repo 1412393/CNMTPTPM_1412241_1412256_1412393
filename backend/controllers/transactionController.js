@@ -175,7 +175,7 @@ exports.PostTransaction = async function(sender, receivers ){
                             pass: "bachuchim"
                         }
                     });
-                    var mailOptions = { from: 'no-reply@3chuchim.com', to: user.email, subject: 'Account Verification Tranction', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + "localhost:3001" + '\/transaction\/confirmation\/' + l.id + '.\n' };
+                    var mailOptions = { from: 'no-reply@3chuchim.com', to: user.email, subject: 'Account Verification Tranction', text: 'Hello,\n\n' + 'Please verify your transaction by clicking the link: \nhttp:\/\/' + req.headers.host + '\/transaction\/confirmation\/' + l.id + '.\n' };
 
                     transporter.sendMail(mailOptions, function (err) {
                         if (err) {
