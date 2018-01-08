@@ -181,15 +181,17 @@ color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-ali
   height: 70%;
   margin-top: 13%;
   margin-left: 5%;
+  text-overflow: ellipsis;
 }
 
 .adminsite-form .trading-form{
   position: absolute;
   border: 1px solid #d2d4d8;
-  width: 50%;
+  width: 90%;
   height: 70%;
   margin-top: 13%;
   margin-left: 5%;
+  text-overflow: ellipsis;
 }
 
 .transactions-table{
