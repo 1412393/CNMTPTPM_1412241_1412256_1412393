@@ -5,10 +5,11 @@ var User = require('../models/user');
 var userController = require("../controllers/userController");
 var async = require('async');
 var await = require('await');
+var Localtransaction = require('../models/localtransaction');
 
-exports.AddTransaction = async function (transaction) {
-
-    let t = new Transaction(transaction);
+exports.AddTransaction = async function (data) {
+    const transaction = data;
+    const t = new Transaction(transaction);
     await t.save(function (err) {
         if (err) console.log(err);
         console.log("save transaction");
@@ -23,6 +24,7 @@ exports.AddTransaction = async function (transaction) {
                             sender: sender,
                             receiver: receiver,
                             transaction: transaction.hash,
+                            outputindex: i,
                             value: tt.value
                         });
                         await(h.save(function (err) {
@@ -33,11 +35,10 @@ exports.AddTransaction = async function (transaction) {
                                     }
                                     else if (user !== null) {
                                         let ac = user.actual_coins + tt.value;
-                                        let av = user.available_coins + tt.value;
+                                        //let av = user.available_coins + tt.value;
                                         console.log(user.actual_coins + " " + tt.value);
                                         await(user.update({
-                                            actual_coins: ac,
-                                            available_coins: av
+                                            actual_coins: ac
                                         }, function (err, result) {
                                             if (err) {
                                                 console.log(err);
@@ -50,11 +51,11 @@ exports.AddTransaction = async function (transaction) {
                                                     else if (user !== null) {
 
                                                         let ac = user.actual_coins - tt.value;
-                                                        let av = user.available_coins - tt.value;
+                                                        //let av = user.available_coins - tt.value;
                                                         console.log(user.actual_coins + " " + tt.value);
                                                         await(user.update({
                                                             actual_coins: ac,
-                                                            available_coins: av
+                                                            canSend: true,
                                                         }, function (err, result) {
                                                             if (err) {
                                                                 console.log(err);
@@ -78,6 +79,19 @@ exports.AddTransaction = async function (transaction) {
                 }
             }));
     })
+    Localtransaction.findOne({ 'transacsion': transaction.hash, "state": "processing" }, function(err, lt) {
+        if (err) {
+        }
+        else if(lt!= null) {
+            lt.update({
+                state: "done",
+            }, function (err, result) {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        }
+    });
 }
 
 
@@ -114,6 +128,7 @@ exports.InitHistory = async function () {
                                 sender: sender,
                                 receiver: receiver,
                                 transaction: transaction.hash,
+                                outputindex: i,
                                 value: tt.value
                             });
                             //b.save();
@@ -184,3 +199,5 @@ exports.InitHistory = async function () {
 
     userController.CalCoin();
 }
+
+

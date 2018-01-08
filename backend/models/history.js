@@ -7,6 +7,8 @@ var HistorySchema = Schema({
     sender: String,
     receiver: String,
     transaction: String,
+    outputindex:Number,
+    used: { type: Boolean, default: false },
     value: Number,
 
 });
