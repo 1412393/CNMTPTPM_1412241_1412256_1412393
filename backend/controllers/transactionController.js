@@ -20,9 +20,11 @@ var nodemailer = require('nodemailer');
 
 
 exports.sendCoin = function(req, res, next) {
+    CheckTran();
     const sender = req.body.content.user;
     const receivers = req.body.content.receivers;
     User.findOne({ 'address.address': sender.address}, function(err, user) {
+
         if (err) {
         }
         let av = user.available_coins;
