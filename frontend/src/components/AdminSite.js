@@ -109,7 +109,7 @@ class AdminSite extends Component {
                       <TableRowColumn>{data.actual_coins}</TableRowColumn>
                       <TableRowColumn>{data.available_coins}</TableRowColumn>
                       <TableRowColumn>{data.email}</TableRowColumn>
-                      <TableRowColumn>{data.address.address}</TableRowColumn>
+                      <TableRowColumn>{data.address}</TableRowColumn>
                     </TableRow>
                     )
                   })}
