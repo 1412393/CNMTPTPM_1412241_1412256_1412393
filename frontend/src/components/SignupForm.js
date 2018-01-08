@@ -18,7 +18,6 @@ class SignUp extends Component {
 
   render() {
     if(this.props.created === true){
-      if(this.props.created === true){
       return(
         <Confirm/>
       )
@@ -40,7 +39,6 @@ class SignUp extends Component {
             </div>
       </div>
     );
-  }
   }
 }
 const mapStateToProps = (state) =>{

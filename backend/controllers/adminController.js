@@ -22,61 +22,74 @@ function jsonConcat(o1, o2) {
 }
 
 exports.manage = function(req,res,next) {
-    User.find({}, function(err, users) {
-                var userInfo = {};
-                var historyInfo = {};
-                var local_history;
-                var amount_user = 0;
-                var amount_actual_coin = 0;
-                var amount_available_coin = 0;
-                users.forEach(function(user) {
-                    userInfo[user._id] = user;
-                    amount_user +=1;
-                    amount_actual_coin += parseInt(user.actual_coins);
-                    amount_available_coin+= parseInt(user.available_coins);
-                    });
+    User.findOne({ email: req.body.content.email}, function(err, user) {
+        if (err) { return  }
 
-                users.forEach(function (user) {
-                       History.find({sender : user.address.address },function (err,history) {
-                           //local_history = jsonConcat(local_history, history);
-                           history.forEach(function (historyitem) {
-                               local_history = new LocalHistory({
-                                   sender: historyitem.sender,
-                                   receiver: historyitem.receiver,
-                                   transaction: historyitem.transaction,
-                                   value: historyitem.value
-                               });
-                               local_history.save(function (err) {
-                                   if (err) {
-                                       return res.status(500).send({msg: err.message});
-                                   }
-                                   res.status(200);
-                               });
-                           })
-                       })
-                        History.find({receiver : user.address.address},function (err,history) {
+        if (!user) {
+            return res.json({ msg: "not a user" });
+        }
 
-                           // local_history = jsonConcat(local_history,history);
-                            history.forEach(function (historyitem) {
-                                local_history = new LocalHistory({
-                                    sender: historyitem.sender,
-                                    receiver: historyitem.receiver,
-                                    transaction: historyitem.transaction,
-                                    value: historyitem.value
-                                });
-                                local_history.save(function (err) {
-                                    if (err) {
-                                        return res.status(500).send({msg: err.message});
-                                    }
-                                    res.status(200);
-                                });
-                            })
-                    });
+        if (user.roles != "admin") {
+            return res.json({ msg: "not a admin" });
+        }
 
+        User.find({}, function(err, users) {
+            var userInfo = [];
+            var historyInfo = {};
+            var local_history;
+            var amount_user = 0;
+            var amount_actual_coin = 0;
+            var amount_available_coin = 0;
+            users.forEach(function(user) {
+                userInfo.push({email: user.email, address: user.address.address, available_coins: user.available_coins, actual_coins:user.actual_coins});
+                amount_user +=1;
+                amount_actual_coin += parseInt(user.actual_coins);
+                amount_available_coin+= parseInt(user.available_coins);
+
+            });
+
+            users.forEach(function (user) {
+                History.find({sender : user.address.address },function (err,history) {
+                    //local_history = jsonConcat(local_history, history);
+                    history.forEach(function (historyitem) {
+                        local_history = new LocalHistory({
+                            sender: historyitem.sender,
+                            receiver: historyitem.receiver,
+                            transaction: historyitem.transaction,
+                            value: historyitem.value
+                        });
+                        local_history.save(function (err) {
+                            if (err) {
+                                return res.status(500).send({msg: err.message});
+                            }
+                            res.status(200);
+                        });
+                    })
                 })
-    LocalHistory.find({},function (err,localhtr) {
-            res.json({ msg: "success",  info: {amount_user: amount_user, amount_actual_coin: amount_actual_coin , amount_available_coin: amount_available_coin  },users, localhtr });
-        })
+                History.find({receiver : user.address.address},function (err,history) {
+
+                    // local_history = jsonConcat(local_history,history);
+                    history.forEach(function (historyitem) {
+                        local_history = new LocalHistory({
+                            sender: historyitem.sender,
+                            receiver: historyitem.receiver,
+                            transaction: historyitem.transaction,
+                            value: historyitem.value
+                        });
+                        local_history.save(function (err) {
+                            if (err) {
+                                return res.status(500).send({msg: err.message});
+                            }
+                            res.status(200);
+                        });
+                    })
+                });
+
+            })
+
+            LocalHistory.find({},function (err,localhtr) {
+                res.json({ msg: "success",  info: {amount_user: amount_user, amount_actual_coin: amount_actual_coin , amount_available_coin: amount_available_coin  },users: userInfo, history: localhtr });
+            })
 
 
 
@@ -84,6 +97,7 @@ exports.manage = function(req,res,next) {
 
 
 
+        });
     });
 }
 
