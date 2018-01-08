@@ -24,6 +24,9 @@ var validator = require('express-validator');
 //-----------------------------express-session----------------
 var session = require('express-session');
 //-----------------------------------------------------------
+//-------------------------------node_acl--------------------
+var node_acl = require('acl');
+//-----------------------------------------------------------
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var appp = require('./services/app')
@@ -34,6 +37,8 @@ mongoose.Promise = global.Promise;
 mongoose.connect(mongoDB, { useMongoClient: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+//-------------------------------------------------
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -60,7 +65,7 @@ var User = require('./models/user');
 
 const WebSocket = require('ws');
 
-const ws = new WebSocket('wss://api.kcoin.club/');
+/*const ws = new WebSocket('wss://api.kcoin.club/');
 
 ws.onopen = function () {
     console.log('connected');
@@ -69,7 +74,6 @@ ws.onopen = function () {
 ws.onmessage = function (data) {
     console.log('incoming data', data)
 };
-
 /*var JSONObject = {
     "inputs":[
         {
@@ -127,7 +131,7 @@ request({
 }, function (error, response, body){
     console.log(response);
 });*/
-appp.GetALlBlock();
+//appp.InitData();
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -158,5 +162,4 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-
 module.exports = app;

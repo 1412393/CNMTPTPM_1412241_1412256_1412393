@@ -6,7 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "acl": "^0.4.10",
+    "acl": "^0.4.11",
     "bcrypt": "^1.0.3",
     "big-integer": "^1.6.26",
     "body-parser": "~1.17.1",

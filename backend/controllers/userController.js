@@ -74,7 +74,8 @@ exports.register = function(req, res, next) {
             address: address,
             available_coins: 0,
             actual_coins: 0});
-
+        req.session.userId = user._id;
+        console.log( req.session.userId );
         user.save(function (err) {
             if ( err) return res.json({ msg: "existed" });
             // Create a verification token for this user
@@ -182,8 +183,19 @@ exports.resendToken = function(req, res, next) {
 
     });
 };
-
-
+exports.manage = function(req,res,next) {
+    if(req.user) return next()
+}, function (req, res, next) {
+    User.findOne({ email: req.body.content.email }, function(err, user) {
+        if (!user) return res.json({ msg: "notexist" });
+        if(user.roles === "admin")
+        res.json({ msg: "success access admin area" });
+        // });
+    });
+}
+function isLogin(req,res,next) {
+ if(req.user) return next();
+}
 /*exports.register = function(req, res, next) {
     //var usr = req.body.user.email;
     //console.log(usr);
