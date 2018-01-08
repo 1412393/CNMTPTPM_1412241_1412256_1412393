@@ -291,4 +291,21 @@ exports.Confirmation = function(req, res, next) {
 }
 
 
-exports.Cancle = function(req, res, next) {}
+exports.Cancle = function(req, res, next) {
+    let id = req.params.id;
+    User.findOne({ email: req.body.content.email }, function(err, user) {
+        if (!user) return res.json({ msg: "notexist" });
+
+        // Make sure the user has been verified
+        if (!user.isVerified) return res.json({ msg: "notverified" });
+        Localtransaction.findOne({ '_id': id, "state": "init", "sender":user.address.address }, function(err, lt) {
+            if (err) {
+            }
+            else if(lt!= null){
+                lt.remove(function (err, result){
+                    res.json({ msg: "success" });
+                });
+            }
+        });
+      });
+}
