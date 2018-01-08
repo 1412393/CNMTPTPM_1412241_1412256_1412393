@@ -131,9 +131,9 @@ class MemberSite extends Component {
               </div>
               <div className="membersite-pagination">
               <Pagination
-                  total = { 2 }
+                  total = { 3 }
                   current = { this.state.indexPageTrans }
-                  display = { 2 }
+                  display = { 3 }
                   onChange = { indexPageTrans => this.setState({ indexPageTrans }) }
               />
               </div>
@@ -164,14 +164,14 @@ class MemberSite extends Component {
               </div>
             <div className="membersite-pagination">
             <Pagination
-                total = { 2 }
+                total = { 3 }
                 current = { this.state.indexPageHis }
-                display = { 2 }
+                display = { 3 }
                 onChange = { indexPageHis => this.setState({ indexPageHis }) }
             />
             </div>
             <div className="send-btn">
-                <RaisedButton onClick={this.handleRenew} label="Send All" secondary={true} style={style} />
+                <RaisedButton onClick={this.handleRenew} label="Renew" secondary={true} style={style} />
               </div>
             </Tab>
           </Tabs>

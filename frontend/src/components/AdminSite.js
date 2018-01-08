@@ -55,10 +55,6 @@ class MemberSite extends Component {
     });
   };
 
-  handleSend = () =>{
-
-  }
-
   handleRenew = () =>{
 
   }
@@ -85,8 +81,6 @@ class MemberSite extends Component {
               <h4>WELCOME ADMIN</h4>
             </div>
             <div className="kcoin-data">
-              <h6 id="actual">Actual KCoin: {"SERVER"}</h6>
-              <h6 id="available">Available KCoin: {"SERVER"}</h6>
             </div>
         </div>
         <div className="trading-form">
@@ -122,14 +116,11 @@ class MemberSite extends Component {
               </div>
               <div className="membersite-pagination">
               <Pagination
-                  total = { 2 }
+                  total = { 3 }
                   current = { this.state.indexPageTrans }
-                  display = { 2 }
+                  display = { 3 }
                   onChange = { indexPageTrans => this.setState({ indexPageTrans }) }
               />
-              </div>
-              <div className="send-btn">
-                <RaisedButton onClick={this.handleSend} label="Renew" secondary={true} style={style} />
               </div>
             </Tab>
             <Tab label="History" value="history">
@@ -157,14 +148,11 @@ class MemberSite extends Component {
             </div>
             <div className="membersite-pagination">
             <Pagination
-                total = { 2 }
+                total = { 3 }
                 current = { this.state.indexPageHis }
-                display = { 2 }
+                display = { 3 }
                 onChange = { indexPageHis => this.setState({ indexPageHis }) }
             />
-            </div>
-            <div className="send-btn">
-                <RaisedButton onClick={this.handleRenew} label="Renew" secondary={true} style={style} />
             </div>
             </Tab>
           </Tabs>

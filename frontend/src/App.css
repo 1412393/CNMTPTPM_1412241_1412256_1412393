@@ -194,9 +194,14 @@ color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-ali
   text-overflow: ellipsis;
 }
 
-.transactions-table{
+.adminsite-form .transactions-table{
+  height: 370px;
+}
+
+.membersite-form .transactions-table{
   height: 320px;
 }
+
 .send-btn{
   display: flex;
   justify-content: center;
