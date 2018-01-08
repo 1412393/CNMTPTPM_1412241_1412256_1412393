@@ -11,29 +11,23 @@ function renewFail(message){
   return {type : "RENEW_FAIL", message: message}
 }
 
-export function renew(email){
+export function renew(){
   return dispatch => {
     dispatch(renewStart())
-    axios.post(apiUrl +'user/resend', {email: email})
+    axios.get(apiUrl +'admin/manage')
     .then(response => {
       const data = response.data;
       if(response && data.msg === "success"){
         console.log(data)
-        // sessionStorage.email = data.email;
-        // sessionStorage.isLogged = true;
         dispatch(renewSuccess(data));
-        window.alert("An verification email has been resent !");
-        // window.location = '/membersite';
       }
       else{
         dispatch(renewFail(data.msg));
-        window.alert("Resent fail !");
       }
     })
     .catch(error => {
       console.log(error);
       dispatch(renewFail("Something went wrong"));
-      window.alert("Resent fail !");
     });
   }
 }

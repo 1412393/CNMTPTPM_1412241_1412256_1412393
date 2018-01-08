@@ -13,11 +13,16 @@ class SignIn extends Component {
     this.props.dispatch(actions.signin(email,password));
   }
   componentDidMount(){
-    if(sessionStorage.email)
-    this.refs.email.value = sessionStorage.email;
+      sessionStorage.email = "";
+      sessionStorage.isLogged = false;
   }
   render() {
     if(this.props.logged === true){
+      if(this.props.result.user.role === "admin")
+      return(
+        <Redirect to='/adminsite'/> 
+      )
+      else
       return(
         <Redirect to='/membersite'/> 
       )

@@ -83,23 +83,23 @@ class MemberSite extends Component {
   }
 
   render() {
-    // if(!this.props.data.user){
-    //   return(
-    //   <Redirect to="/" />
-    //   )
-    // }
+    if(!this.props.result.user){
+      return(
+      <Redirect to="/" />
+      )
+    }
 
     return (
       <div className="membersite-form">
         <div className="info-form">
             <div className="info-image"></div>
             <div className="address-data">
-              <h6 id="email">{"this.props.data.user.email"}</h6>
-              <h6 id="address">Your address : {"this.props.data.user.address"}</h6>
+              <h6 id="email">{this.props.result.user.email}</h6>
+              <h6 id="address">Your address : {this.props.result.user.address}</h6>
             </div>
             <div className="kcoin-data">
-              <h6 id="actual">Actual KCoin: {"this.props.data.user.actual_coins"}</h6>
-              <h6 id="available">Available KCoin: {"this.props.data.user.available_coins"}</h6>
+              <h6 id="actual">Actual KCoin: {this.props.result.user.actual_coins}</h6>
+              <h6 id="available">Available KCoin: {this.props.result.user.available_coins}</h6>
             </div>
         </div>
         <div className="trading-form">
@@ -203,7 +203,7 @@ const mapStateToProps = (state) =>{
     return {
       isSending: state.memberData.isSending,
       sent: state.memberData.sent,
-      data: state.signinData.result
+      result: state.signinData.result,
     }
 }
 
