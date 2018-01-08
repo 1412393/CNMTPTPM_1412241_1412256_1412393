@@ -1,5 +1,6 @@
 var express = require('express');
 var User = require('../models/user');
+var Transaction = require('../models/transaction');
 var Token = require('../models/token');
 var crypto = require('crypto');
 var bcrypt = require('bcryptjs');
@@ -282,19 +283,7 @@ function CountUser()
 {
 
 }
-exports.manage = function(req,res,next) {
-    if(req.user) return next()
-}, function (req, res, next) {
-    User.findOne({ email: req.body.content.email }, function(err, user) {
-        if(user.roles === "admin") {
-            User.count({}, function( err, count){
-                console.log( "Number of users:", count );
-            })
-        }
-        res.json({ msg: "success",  info: {user_count:count } });
-        // });
-    });
-}
+
 /*exports.register = function(req, res, next) {
     //var usr = req.body.user.email;
     //console.log(usr);

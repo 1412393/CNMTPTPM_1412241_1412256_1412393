@@ -13,7 +13,7 @@ router.post('/signin', userController.login);
 
 router.get('/confirmation/:token', userController.confirmation);
 router.post('/resend', userController.resendToken);
-router.get('/manage', userController.manage);
+
 
 
 

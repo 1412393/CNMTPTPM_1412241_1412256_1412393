@@ -11,6 +11,7 @@ var helmet = require('helmet');
 
 var index = require('./routes/index');
 var user = require('./routes/user');
+var admin = require('./routes/admin')
 var mongoose = require('mongoose');
 var utils = require('./services/utils')
 var app = express();
@@ -157,6 +158,7 @@ app.use(function(req, res, next) {
 app.use(compression()); //Compress all routes
 app.use('/', index);
 app.use('/user', user);
+app.use('/admin',admin);
 app.use(helmet());
 
 // catch 404 and forward to error handler
