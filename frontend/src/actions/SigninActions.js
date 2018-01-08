@@ -23,10 +23,9 @@ export function signin(email,password){
       const data = response.data;
       if(response && data.user){
         console.log(data)
-        // sessionStorage.email = data.email;
-        // sessionStorage.isLogged = true;
+        sessionStorage.email = data.email;
+        sessionStorage.isLogged = true;
         dispatch(signinSuccess(data))
-        // window.location = '/membersite';
       }
       else{
         dispatch(signinFail(data.msg))

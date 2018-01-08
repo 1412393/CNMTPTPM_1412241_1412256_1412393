@@ -14,7 +14,7 @@ function sendFail(message){
 export function send(content){
   return dispatch => {
     dispatch(sendStart())
-    axios.post(apiUrl +'user/resend', {content})
+    axios.post(apiUrl +'user/send', {content})
     .then(response => {
       const data = response.data;
       if(response && data.msg === "success"){

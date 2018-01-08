@@ -37,15 +37,13 @@ const styles = {
   },
 };
 
-class MemberSite extends Component {
+class AdminSite extends Component {
   constructor(props) {
       super(props);
       this.state = {
         stage: "transactions",
         indexPageTrans: 1,
         indexPageHis: 1,
-        transactions:[],
-        history:[],
       };
   }
 
@@ -59,20 +57,14 @@ class MemberSite extends Component {
 
   }
 
-  handleAdd = () =>{
-    const address = this.refs.address.value;
-    const value = parseInt(this.refs.kcoin.value);
-    let transaction = {
-      address: address,
-      value: value
-    }
-    this.setState({
-      transactions: this.state.transactions.concat(transaction)
-    })
-    console.log(this.state.transactions)
+  componentDidMount(){
+    this.props.dispatch(actions.renew());
   }
 
   render() {
+    const {amount_actual_coin,amount_available_coin,amount_user} = this.props.data.info !== undefined ? this.props.data.info : "";
+    const users = this.props.data.users !== undefined ? this.props.data.users : [];
+    const history = this.props.data.localhtr !== undefined ? this.props.data.localhtr : [];
     return (
       <div className="adminsite-form">
         <div className="info-form">
@@ -81,6 +73,9 @@ class MemberSite extends Component {
               <h4>WELCOME ADMIN</h4>
             </div>
             <div className="kcoin-data">
+              <h6 id="actual">Actual KCoin: {amount_actual_coin}</h6>
+              <h6 id="available">Available KCoin: {amount_available_coin}</h6>
+              <h6 id="totaluser">Total Users: {amount_user}</h6>
             </div>
         </div>
         <div className="trading-form">
@@ -89,7 +84,7 @@ class MemberSite extends Component {
             value={this.state.value}
             onChange={this.handleChange}
           >
-            <Tab label="Transactions" value="transactions">
+            <Tab label="Users" value="transactions">
               <div className="transactions-table">
               <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
@@ -101,13 +96,13 @@ class MemberSite extends Component {
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                  {this.state.transactions.map((data,index)=>{
+                  {users.map((data,index)=>{
                     return(
                     <TableRow key={index}>
-                      <TableRowColumn>{data.address}</TableRowColumn>
-                      <TableRowColumn>{data.value}</TableRowColumn>
-                      <TableRowColumn>{data.value}</TableRowColumn>
-                      <TableRowColumn>{data.value}</TableRowColumn>
+                      <TableRowColumn>{data.actual_coins}</TableRowColumn>
+                      <TableRowColumn>{data.available_coins}</TableRowColumn>
+                      <TableRowColumn>{data.email}</TableRowColumn>
+                      <TableRowColumn>{data.email}</TableRowColumn>
                     </TableRow>
                     )
                   })}
@@ -123,7 +118,7 @@ class MemberSite extends Component {
               />
               </div>
             </Tab>
-            <Tab label="History" value="history">
+            <Tab label="Transactions" value="history">
             <div className="transactions-table">
             <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
@@ -134,11 +129,12 @@ class MemberSite extends Component {
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                  {this.state.history.map((data,index)=>{
+                  {history.map((data,index)=>{
+                    if(index< this.state.indexPageHis*5 && index >= (this.state.indexPageHis-1)*5)
                     return(
                     <TableRow key={index}>
-                      <TableRowColumn>{data.address}</TableRowColumn>
-                      <TableRowColumn>{data.value}</TableRowColumn>
+                      <TableRowColumn>{data.sender}</TableRowColumn>
+                      <TableRowColumn>{data.receiver}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
                     </TableRow>
                     )
@@ -170,8 +166,8 @@ class MemberSite extends Component {
 
 const mapStateToProps = (state) =>{
     return {
-      data: state.signinData.result
+      data: state.adminData.result
     }
 }
 
-export default connect(mapStateToProps)(MemberSite);
+export default connect(mapStateToProps)(AdminSite);
