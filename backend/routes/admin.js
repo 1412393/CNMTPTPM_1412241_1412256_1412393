@@ -24,8 +24,7 @@ function requireAdmin() {
     }
 }
 
-router.get('/manage', requireAdmin, adminController.manage);
-router.get('/usermanage',requireAdmin, adminController.user_manage);
-router.get('/transactionmanage',requireAdmin, adminController.transaction_manage);
+router.get('/manage', adminController.manage);
+
 
 module.exports = router;
