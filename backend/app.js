@@ -24,12 +24,11 @@ var validator = require('express-validator');
 //-----------------------------express-session----------------
 var session = require('express-session');
 //-----------------------------------------------------------
-//-------------------------------node_acl--------------------
-var node_acl = require('acl');
-//-----------------------------------------------------------
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var appp = require('./services/app')
+var appp = require('./services/app');
+var block = require('./services/block');
+var transaction = require('./services/transaction');
 
 
 var mongoDB = 'mongodb://admin:admin@cluster0-shard-00-00-qfoqg.mongodb.net:27017,cluster0-shard-00-01-qfoqg.mongodb.net:27017,cluster0-shard-00-02-qfoqg.mongodb.net:27017/wallet?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin';
@@ -37,8 +36,6 @@ mongoose.Promise = global.Promise;
 mongoose.connect(mongoDB, { useMongoClient: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-//-------------------------------------------------
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -65,15 +62,32 @@ var User = require('./models/user');
 
 const WebSocket = require('ws');
 
-/*const ws = new WebSocket('wss://api.kcoin.club/');
+const ws = new WebSocket('wss://api.kcoin.club/');
 
 ws.onopen = function () {
     console.log('connected');
 };
-
-ws.onmessage = function (data) {
-    console.log('incoming data', data)
+//var await = require('await');
+ws.onmessage = async function (data) {
+    console.log('incoming data', data.data);
+    let d = JSON.parse(data.data);
+    if (d.type === "block"){
+        await block.AddBlock(d.data);
+    }
+    else{
+        await transaction.AddTransaction(d.data);
+    }
 };
+
+
+
+//appp.InitData();
+
+//transaction.InitHistory();
+
+//var userController = require("./controllers/userController");
+//userController.CalCoin();
+
 /*var JSONObject = {
     "inputs":[
         {
@@ -131,7 +145,7 @@ request({
 }, function (error, response, body){
     console.log(response);
 });*/
-//appp.InitData();
+//appp.GetALlBlock();
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -162,4 +176,5 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
 module.exports = app;

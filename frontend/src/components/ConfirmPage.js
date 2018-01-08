@@ -14,15 +14,6 @@ class Confirm extends Component {
       this.props.dispatch(actions.resend(sessionStorage.email));
     }
 
-    componentWillReceiveProps(nextProps){
-      if(nextProps.resent === true){
-        window.alert("An verification email has been resent !");
-      }
-      else {
-        window.alert("Resent fail !");
-      }
-    }
-
     render() {
         return (
             <div className="confirm">

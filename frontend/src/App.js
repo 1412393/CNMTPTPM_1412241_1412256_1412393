@@ -8,7 +8,7 @@ import store from './store.js';
 import SignIn from './components/SigninForm.js';
 import SignUp from './components/SignupForm.js';
 import MemberSite from './components/MemberSite.js';
-
+import AdminSite from './components/AdminSite.js'
 class App extends Component {
   render() {
     return (
@@ -17,6 +17,7 @@ class App extends Component {
           <Route exact path='/' component={SignIn}/>
           <Route path='/membersite' component={MemberSite}/>
           <Route path='/signup' component={SignUp}/>
+          <Route path='/adminsite' component={AdminSite}/>
         </Switch>
       </Provider>
     )
