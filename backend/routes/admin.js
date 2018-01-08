@@ -5,7 +5,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 var adminController = require("../controllers/adminController");
 var User = require('../models/user');
 
-function requireAdmin() {
+/*function requireAdmin() {
     return function(req, res, next) {
         User.findOne({ email: req.body.content.email}, function(err, user) {
             if (err) { return next(err); }
@@ -22,9 +22,9 @@ function requireAdmin() {
             next();
         });
     }
-}
+}*/
 
-router.get('/manage', adminController.manage);
+router.post('/manage', adminController.manage);
 
 
 module.exports = router;
