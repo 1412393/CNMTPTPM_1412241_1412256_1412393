@@ -12,7 +12,7 @@ const bitInt = require('big-integer');
 const ursa = require('ursa');
 var await = require('await');
 const HASH_ALGORITHM = 'sha256';
-
+var Localtransaction = require('../models/localtransaction');
 
 exports.login = function(req, res, next) {
 
@@ -39,11 +39,64 @@ exports.login = function(req, res, next) {
             // Login successful, write token, and send back user
             //res.json({ msg: "success", token: generateToken(user), user: user });
             res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles} });
+
+
        // });
     });
+}
 
 
+exports.updateData = function(req, res, next){
+    User.findOne({ email: req.body.content.email }, function(err, user) {
+        if (!user) return res.json({ msg: "notexist" });
 
+        // Make sure the user has been verified
+        if (!user.isVerified) return res.json({ msg: "notverified" });
+
+        // Login successful, write token, and send back user
+        //res.json({ msg: "success", token: generateToken(user), user: user });
+        History.find({ 'receiver': user.address.address }, function(err, histories1) {
+            if (err) {
+            }
+            else {
+                History.find({'sender': user.address.address}, function (err, histories2) {
+                    if (err) {
+                    }
+                    else {
+                        let his = [];
+                        let c = 0;
+                        if (histories1 != null)
+                            histories1.forEach((history, index) => {
+                                his.push(history);
+                            });
+
+                        if (histories2 != null)
+                            histories2.forEach((history, index) => {
+                                his.push(history);
+                            });
+                        Localtransaction.find({'sender': user.address.address}, function (err, lts) {
+                            if (err) {
+                            }
+                            else {
+                                let localtran = [];
+                                if (lts != null)
+                                    lts.forEach((lt, index) => {
+                                        localtran.push({transaction: lt.transaction, state: lt.state, value: lt.value });
+                                    });
+                                res.json({ msg: "success",  available_coins:user.available_coins, actual_coins:user.actual_coins, history: his, localtransaction: localtran} );
+                                //console.log({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles, history: his, localtransaction: localtran} });
+                            }
+                        });
+
+                    }
+
+
+                });
+            }
+        });
+
+        // });
+    });
 }
 
 exports.register = function(req, res, next) {
@@ -230,17 +283,20 @@ exports.CalCoin = async function () {
                 History.find({ 'receiver': user.address.address }, function(err, histories1) {
                     if (err) {
                     }
-                    else if (histories1!==null)
+                    else
                     {
                         History.find({ 'sender': user.address.address }, function(err, histories2) {
                             if (err) {
                             }
-                            else if (histories2!==null)
+                            else
                             {
                                 let c=0;
+                                if (histories1!=null)
                                 histories1.forEach((history, index) => {
                                     c+=history.value;
                                 });
+
+                                if (histories2!=null)
                                 histories2.forEach((history, index) => {
                                     c-=history.value;
                                 });

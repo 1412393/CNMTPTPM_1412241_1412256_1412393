@@ -17,6 +17,7 @@ var UserSchema = Schema({
     name: String,
     email: { type: String, unique: true },
     roles: { type: String, default: 'user' },
+    canSend: { type: Boolean, default: true },
     isVerified: { type: Boolean, default: false },
     password: String,
     passwordResetToken: String,
