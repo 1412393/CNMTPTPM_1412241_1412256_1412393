@@ -22,6 +22,8 @@ class SignIn extends Component {
         <Redirect to='/membersite'/> 
       )
     }
+
+
     if(this.props.isLogging === true)
       return(
         <LoadingPage/>

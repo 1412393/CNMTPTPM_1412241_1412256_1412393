@@ -1,5 +1,6 @@
 var express = require('express');
 var User = require('../models/user');
+var Transaction = require('../models/transaction');
 var Token = require('../models/token');
 var crypto = require('crypto');
 var bcrypt = require('bcryptjs');
@@ -37,7 +38,7 @@ exports.login = function(req, res, next) {
 
             // Login successful, write token, and send back user
             //res.json({ msg: "success", token: generateToken(user), user: user });
-            res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address } });
+            res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles} });
        // });
     });
 
@@ -277,6 +278,10 @@ exports.CalCoin = async function () {
         }
     });
     console.log("cal done!");
+}
+function CountUser()
+{
+
 }
 
 /*exports.register = function(req, res, next) {

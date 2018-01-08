@@ -1,1 +1,1 @@
-export const apiUrl = "https://thawing-waters-63555.herokuapp.com/";
+export const apiUrl = "https://localhost:3001/";
