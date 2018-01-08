@@ -11,11 +11,9 @@ var helmet = require('helmet');
 
 var index = require('./routes/index');
 var user = require('./routes/user');
-<<<<<<< HEAD
 var transactionroute = require('./routes/transaction');
-=======
 var admin = require('./routes/admin')
->>>>>>> 2320d25b75e28d7d3ec0d1a696d37a05546f823d
+
 var mongoose = require('mongoose');
 var utils = require('./services/utils')
 var app = express();
@@ -65,21 +63,21 @@ app.use(passport.session());
 var User = require('./models/user');
 
 
-//const WebSocket = require('ws');
+const WebSocket = require('ws');
 
-//const ws = new WebSocket('wss://api.kcoin.club/');
+const ws = new WebSocket('wss://api.kcoin.club/');
 
 //ws.onopen = function () {
  //   console.log('connected');
 //};
 //var await = require('await');
-<<<<<<< HEAD
-ws.onmessage = async function (data) {
-    //console.log('incoming data', data.data);
-=======
+
 /*ws.onmessage = async function (data) {
+    //console.log('incoming data', data.data);
+}
+ws.onmessage = async function (data) {
     console.log('incoming data', data.data);
->>>>>>> 2320d25b75e28d7d3ec0d1a696d37a05546f823d
+
     let d = JSON.parse(data.data);
     if (d.type === "block"){
         await block.AddBlock(d.data);
@@ -89,8 +87,8 @@ ws.onmessage = async function (data) {
         await transaction.AddTransaction(d.data);
     }
 };
-*/
 
+*/
 
 //appp.InitData();
 
@@ -118,11 +116,9 @@ app.use(function(req, res, next) {
 app.use(compression()); //Compress all routes
 app.use('/', index);
 app.use('/user', user);
-<<<<<<< HEAD
 app.use('/transaction', transactionroute);
-=======
 app.use('/admin',admin);
->>>>>>> 2320d25b75e28d7d3ec0d1a696d37a05546f823d
+
 app.use(helmet());
 
 // catch 404 and forward to error handler
