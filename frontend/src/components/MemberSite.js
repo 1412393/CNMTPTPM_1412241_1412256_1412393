@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as actions from '../actions/InitData.js'
+import * as actions from '../actions/Member.js'
 import {connect} from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -15,6 +15,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Pagination from 'material-ui-pagination';
+import { Redirect } from 'react-router-dom'
 
 
 const stylePaper = {
@@ -44,7 +45,8 @@ class MemberSite extends Component {
         stage: "transactions",
         indexPageTrans: 1,
         indexPageHis: 1,
-        transactions:[]
+        transactions:[],
+        history: [],
       };
   }
 
@@ -57,7 +59,14 @@ class MemberSite extends Component {
     //this.props.dispatch(actions.signin);
   }
   handleSend = () =>{
-
+    const transactions = this.state.transactions
+    const content = {
+      sender:{
+        address: sessionStorage.address
+      },
+      receivers:transactions
+    }
+    this.props.dispatch(actions.send(content))
   }
 
   handleAdd = () =>{
@@ -74,6 +83,12 @@ class MemberSite extends Component {
   }
 
   render() {
+    // if(!this.props.data.user){
+    //   return(
+    //   <Redirect to="/" />
+    //   )
+    // }
+
     return (
       <div className="membersite-form">
         <div className="info-form">
@@ -127,6 +142,26 @@ class MemberSite extends Component {
               </div>
             </Tab>
             <Tab label="History" value="history">
+            <div className="transactions-table">
+              <Table>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                  <TableRow>
+                    <TableHeaderColumn>Type</TableHeaderColumn>
+                    <TableHeaderColumn>KCoin</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
+                  {this.state.transactions.map((data,index)=>{
+                    return(
+                    <TableRow key={index}>
+                      <TableRowColumn>{data.address}</TableRowColumn>
+                      <TableRowColumn>{data.value}</TableRowColumn>
+                    </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+              </div>
             <div className="membersite-pagination">
             <Pagination
                 total = { 2 }
@@ -135,6 +170,9 @@ class MemberSite extends Component {
                 onChange = { indexPageHis => this.setState({ indexPageHis }) }
             />
             </div>
+            <div className="send-btn">
+                <RaisedButton onClick={this.handleRenew} label="Send All" secondary={true} style={style} />
+              </div>
             </Tab>
           </Tabs>
           </MuiThemeProvider>
@@ -163,6 +201,8 @@ class MemberSite extends Component {
 
 const mapStateToProps = (state) =>{
     return {
+      isSending: state.memberData.isSending,
+      sent: state.memberData.sent,
       data: state.signinData.result
     }
 }

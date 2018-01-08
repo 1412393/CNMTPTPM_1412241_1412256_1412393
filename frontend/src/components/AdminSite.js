@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as actions from '../actions/InitData.js'
+import * as actions from '../actions/Admin.js'
 import {connect} from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -44,7 +44,8 @@ class MemberSite extends Component {
         stage: "transactions",
         indexPageTrans: 1,
         indexPageHis: 1,
-        transactions:[]
+        transactions:[],
+        history:[],
       };
   }
 
@@ -53,10 +54,12 @@ class MemberSite extends Component {
       value: value,
     });
   };
-  handleSignOut = () =>{
-    //this.props.dispatch(actions.signin);
-  }
+
   handleSend = () =>{
+
+  }
+
+  handleRenew = () =>{
 
   }
 
@@ -97,8 +100,10 @@ class MemberSite extends Component {
               <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                   <TableRow>
+                    <TableHeaderColumn>Actual</TableHeaderColumn>
+                    <TableHeaderColumn>Available</TableHeaderColumn>
+                    <TableHeaderColumn>Email</TableHeaderColumn>
                     <TableHeaderColumn>Address</TableHeaderColumn>
-                    <TableHeaderColumn>KCoin</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
@@ -106,6 +111,8 @@ class MemberSite extends Component {
                     return(
                     <TableRow key={index}>
                       <TableRowColumn>{data.address}</TableRowColumn>
+                      <TableRowColumn>{data.value}</TableRowColumn>
+                      <TableRowColumn>{data.value}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
                     </TableRow>
                     )
@@ -122,10 +129,32 @@ class MemberSite extends Component {
               />
               </div>
               <div className="send-btn">
-                <RaisedButton onClick={this.handleSend} label="Send All" secondary={true} style={style} />
+                <RaisedButton onClick={this.handleSend} label="Renew" secondary={true} style={style} />
               </div>
             </Tab>
             <Tab label="History" value="history">
+            <div className="transactions-table">
+            <Table>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                  <TableRow>
+                    <TableHeaderColumn>From</TableHeaderColumn>
+                    <TableHeaderColumn>To</TableHeaderColumn>
+                    <TableHeaderColumn>KCoin</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
+                  {this.state.history.map((data,index)=>{
+                    return(
+                    <TableRow key={index}>
+                      <TableRowColumn>{data.address}</TableRowColumn>
+                      <TableRowColumn>{data.value}</TableRowColumn>
+                      <TableRowColumn>{data.value}</TableRowColumn>
+                    </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </div>
             <div className="membersite-pagination">
             <Pagination
                 total = { 2 }
@@ -133,6 +162,9 @@ class MemberSite extends Component {
                 display = { 2 }
                 onChange = { indexPageHis => this.setState({ indexPageHis }) }
             />
+            </div>
+            <div className="send-btn">
+                <RaisedButton onClick={this.handleRenew} label="Renew" secondary={true} style={style} />
             </div>
             </Tab>
           </Tabs>
