@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import * as actions from '../actions/Member.js'
 import {connect} from 'react-redux';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import Dialog from 'material-ui/Dialog';
 import {
   Table,
   TableBody,
@@ -12,6 +13,7 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Pagination from 'material-ui-pagination';
@@ -43,8 +45,10 @@ class MemberSite extends Component {
       super(props);
       this.state = {
         stage: "transactions",
+        open: false,
         indexPageTrans: 1,
         indexPageHis: 1,
+        indexPageRecent: 1,
         transactions:[],
         available: 0,
         actual: 0,
@@ -56,9 +60,13 @@ class MemberSite extends Component {
       value: value,
     });
   };
-  handleSignOut = () =>{
-    //this.props.dispatch(actions.signin);
+
+  handleClear= () =>{
+    var transactions = this.state.transactions;
+    transactions.forEach((item) => item.status = "Success");
+    this.setState({transactions: transactions})
   }
+
   handleSend = () =>{
     const transactions = this.state.transactions
     const content = {
@@ -75,7 +83,8 @@ class MemberSite extends Component {
     const value = parseInt(this.refs.kcoin.value);
     let transaction = {
       address: address,
-      value: value
+      value: value,
+      status: "Ready",
     }
     this.setState({
       transactions: this.state.transactions.concat(transaction)
@@ -85,12 +94,21 @@ class MemberSite extends Component {
 
   componentWillReceiveProps(nextProps){
     if(nextProps.sent === true){
+      var transactions = this.state.transactions;
+      transactions.forEach((item) => item.status = "Success");
       let sent = this.state.transactions.reduce((a, b) => a + b, 0);
       this.setState({
-        transactions: [],
+        transactions: transactions,
         actual: this.state.actual - sent
       })
-      window.alert("Send success")
+    }
+
+    if(nextProps.isSending === true){
+      var transactions = this.state.transactions;
+      transactions.forEach((item) => item.status = "Sending");
+      this.setState({
+        transactions: transactions,
+      })
     }
 
     if(nextProps.result.user.actual_coins !== this.props.result.user.actual_coins){
@@ -116,7 +134,13 @@ class MemberSite extends Component {
       <Redirect to="/" />
       )
     }
-
+    const actions = [
+      <FlatButton
+        label="OK"
+        primary={true}
+        onClick={() => this.setState({open: false})}
+      />
+    ]
     const history = this.props.data.history !== undefined ?  this.props.data.history: [];
     const localtransaction = this.props.data.localtransaction !== undefined ?  this.props.data.localtransaction: [];
 
@@ -146,18 +170,33 @@ class MemberSite extends Component {
                   <TableRow>
                     <TableHeaderColumn>Address</TableHeaderColumn>
                     <TableHeaderColumn>KCoin</TableHeaderColumn>
+                    <TableHeaderColumn>Status</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
                   {this.state.transactions.map((data,index)=>{
                     if(index< this.state.indexPageTrans*5 && index >= (this.state.indexPageTrans-1)*5)
                     return(
-                    <TableRow key={index}>
+                    <div>
+                    <TableRow key={index} onClick={()=> this.setState({open: true})}>
                       <TableRowColumn>{data.address}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
+                      <TableRowColumn><span id={data.status}>{data.status}</span></TableRowColumn>
                     </TableRow>
+                      <Dialog
+                        title="Transaction Detail"
+                        actions={actions}
+                        modal={true}
+                        open={this.state.open}
+                      >
+                      Send to : {data.address}
+                      Value : {data.value}
+                      Status : {data.status}
+                      </Dialog>
+                    </div>
                     )
                   })}
+                  
                 </TableBody>
               </Table>
               </div>
@@ -170,6 +209,7 @@ class MemberSite extends Component {
               />
               </div>
               <div className="send-btn">
+                <RaisedButton onClick={this.handleClear} label="Clear All" secondary={true} style={style} />
                 <RaisedButton onClick={this.handleSend} label="Send All" secondary={true} style={style} />
               </div>
             </Tab>
@@ -203,6 +243,42 @@ class MemberSite extends Component {
                 current = { this.state.indexPageHis }
                 display = { 3 }
                 onChange = { indexPageHis => this.setState({ indexPageHis }) }
+            />
+            </div>
+            <div className="send-btn">
+                <RaisedButton onClick={this.handleRenew} label="Renew" secondary={true} style={style} />
+              </div>
+            </Tab>
+            <Tab label="Recent" value="recent">
+            <div className="transactions-table">
+              <Table>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                  <TableRow>
+                    <TableHeaderColumn>From</TableHeaderColumn>
+                    <TableHeaderColumn>To</TableHeaderColumn>
+                    <TableHeaderColumn>KCoin</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
+                  {localtransaction.map((data,index)=>{
+                    if(index< this.state.indexPageRecent*5 && index >= (this.state.indexPageRecent-1)*5)
+                    return(
+                    <TableRow key={index}>
+                      <TableRowColumn>{data.sender}</TableRowColumn>
+                      <TableRowColumn>{data.receiver}</TableRowColumn>
+                      <TableRowColumn>{data.value}</TableRowColumn>
+                    </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+              </div>
+            <div className="membersite-pagination">
+            <Pagination
+                total = { 3 }
+                current = { this.state.indexPageRecent }
+                display = { 3 }
+                onChange = { indexPageRecent => this.setState({ indexPageRecent }) }
             />
             </div>
             <div className="send-btn">

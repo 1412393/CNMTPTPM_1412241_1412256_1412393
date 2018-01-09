@@ -262,3 +262,19 @@ input, select {
 .logout-btn{
   float: right;
 }
+
+span#Ready{
+  color: blue;
+}
+
+span#Sending{
+  color: lightblue;
+}
+
+span#Success{
+  color: green;
+}
+
+span#Fail{
+  color: red;
+}
