@@ -8,6 +8,8 @@ var User = require('../models/user');
 
 router.post('/signup', userController.register);
 router.post('/signin', userController.login);
+router.post('/islogged',userController.islogged);
+router.post('/signout',userController.signout)
 //router.get('/all', userController.all);
 
 

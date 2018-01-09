@@ -26,6 +26,7 @@ var validator = require('express-validator');
 //--------------------------------------------------------------------
 //-----------------------------express-session----------------
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 //-----------------------------------------------------------
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -53,9 +54,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(validator());
 app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false
+    secret: 'work hard',
+    resave: true,
+    cookie: { maxAge: 8*60*60*1000 },
+    saveUninitialized: false,
+    store: new MongoStore({
+        mongooseConnection: db
+    })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -82,14 +87,14 @@ ws.onmessage = async function (data) {
     if (d.type === "block"){
         await block.AddBlock(d.data);
     }
-    else
-    if (d.type === "transaction"){
-        await transaction.AddTransaction(d.data);
-    }
-};
+    //else
+    //if (d.type === "transaction"){
+    //    await transaction.AddTransaction(d.data);
+    //}
+};*/
 
-*/
-
+var userController = require("./controllers/userController");
+   // userController.initUser();
 //appp.InitData();
 
 //transaction.InitHistory();
