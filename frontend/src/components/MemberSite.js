@@ -3,7 +3,6 @@ import * as actions from '../actions/Member.js'
 import {connect} from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import Dialog from 'material-ui/Dialog';
 import {
   Table,
   TableBody,
@@ -12,8 +11,9 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Pagination from 'material-ui-pagination';
@@ -62,9 +62,7 @@ class MemberSite extends Component {
   };
 
   handleClear= () =>{
-    var transactions = this.state.transactions;
-    transactions.forEach((item) => item.status = "Success");
-    this.setState({transactions: transactions})
+    this.setState({transactions: []})
   }
 
   handleSend = () =>{
@@ -134,15 +132,18 @@ class MemberSite extends Component {
       <Redirect to="/" />
       )
     }
+
     const actions = [
       <FlatButton
         label="OK"
         primary={true}
-        onClick={() => this.setState({open: false})}
-      />
-    ]
+        onClick={() => this.setState({open:false})}
+      />,
+    ];
+
     const history = this.props.data.history !== undefined ?  this.props.data.history: [];
     const localtransaction = this.props.data.localtransaction !== undefined ?  this.props.data.localtransaction: [];
+    
 
     return (
       <div className="membersite-form">
@@ -177,23 +178,11 @@ class MemberSite extends Component {
                   {this.state.transactions.map((data,index)=>{
                     if(index< this.state.indexPageTrans*5 && index >= (this.state.indexPageTrans-1)*5)
                     return(
-                    <div>
-                    <TableRow key={index} onClick={()=> this.setState({open: true})}>
+                    <TableRow key={index}>
                       <TableRowColumn>{data.address}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
                       <TableRowColumn><span id={data.status}>{data.status}</span></TableRowColumn>
                     </TableRow>
-                      <Dialog
-                        title="Transaction Detail"
-                        actions={actions}
-                        modal={true}
-                        open={this.state.open}
-                      >
-                      Send to : {data.address}
-                      Value : {data.value}
-                      Status : {data.status}
-                      </Dialog>
-                    </div>
                     )
                   })}
                   
@@ -221,6 +210,7 @@ class MemberSite extends Component {
                     <TableHeaderColumn>From</TableHeaderColumn>
                     <TableHeaderColumn>To</TableHeaderColumn>
                     <TableHeaderColumn>KCoin</TableHeaderColumn>
+                    <TableHeaderColumn>Detail</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
@@ -231,6 +221,7 @@ class MemberSite extends Component {
                       <TableRowColumn>{data.sender}</TableRowColumn>
                       <TableRowColumn>{data.receiver}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
+                      <TableRowColumn><RaisedButton label="Detail" onClick={()=> this.setState({open:true})} style={{margin:1}} /></TableRowColumn>
                     </TableRow>
                     )
                   })}
@@ -247,16 +238,17 @@ class MemberSite extends Component {
             </div>
             <div className="send-btn">
                 <RaisedButton onClick={this.handleRenew} label="Renew" secondary={true} style={style} />
-              </div>
+            </div>
+              
             </Tab>
             <Tab label="Recent" value="recent">
             <div className="transactions-table">
               <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                   <TableRow>
-                    <TableHeaderColumn>From</TableHeaderColumn>
                     <TableHeaderColumn>To</TableHeaderColumn>
                     <TableHeaderColumn>KCoin</TableHeaderColumn>
+                    <TableHeaderColumn>Status</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
@@ -264,9 +256,9 @@ class MemberSite extends Component {
                     if(index< this.state.indexPageRecent*5 && index >= (this.state.indexPageRecent-1)*5)
                     return(
                     <TableRow key={index}>
-                      <TableRowColumn>{data.sender}</TableRowColumn>
-                      <TableRowColumn>{data.receiver}</TableRowColumn>
+                      <TableRowColumn>{"data.outputs"}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
+                      <TableRowColumn>{data.state}</TableRowColumn>
                     </TableRow>
                     )
                   })}
@@ -283,7 +275,8 @@ class MemberSite extends Component {
             </div>
             <div className="send-btn">
                 <RaisedButton onClick={this.handleRenew} label="Renew" secondary={true} style={style} />
-              </div>
+            </div>
+
             </Tab>
           </Tabs>
           </MuiThemeProvider>
@@ -303,6 +296,18 @@ class MemberSite extends Component {
         <div className="logout-btn">
         <MuiThemeProvider>
           <RaisedButton onClick={() => window.location = "/"} label="Logout" primary={true} style={style} />
+          <Dialog
+          title="Transaction Detail"
+          actions={actions}
+          modal={true}
+          open={this.state.open}
+          >
+          <div id="modal">
+              <span>fsdfasfs</span><br/>
+              <span>fsdfsdfdsf</span><br/>
+              <span>fsdfsfasdfsf</span><br/>
+          </div>
+          </Dialog>
         </MuiThemeProvider>
         </div>
       </div>
