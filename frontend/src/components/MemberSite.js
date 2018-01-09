@@ -46,7 +46,8 @@ class MemberSite extends Component {
         indexPageTrans: 1,
         indexPageHis: 1,
         transactions:[],
-        history: [],
+        available: 0,
+        actual: 0,
       };
   }
 
@@ -61,10 +62,10 @@ class MemberSite extends Component {
   handleSend = () =>{
     const transactions = this.state.transactions
     const content = {
-      sender:{
+      user:{
         address: sessionStorage.address
       },
-      receivers:transactions
+      receivers: transactions
     }
     this.props.dispatch(actions.send(content))
   }
@@ -82,12 +83,42 @@ class MemberSite extends Component {
     console.log(this.state.transactions)
   }
 
+  componentWillReceiveProps(nextProps){
+    if(nextProps.sent === true){
+      let sent = this.state.transactions.reduce((a, b) => a + b, 0);
+      this.setState({
+        transactions: [],
+        actual: this.state.actual - sent
+      })
+      window.alert("Send success")
+    }
+
+    if(nextProps.result.user.actual_coins !== this.props.result.user.actual_coins){
+      this.setState({
+        actual: nextProps.result.user.actual_coins
+      })
+    }
+
+    if(nextProps.result.user.available_coins !== this.props.result.user.available_coins){
+      this.setState({
+        available: nextProps.result.user.available_coins
+      })
+    }
+  }
+
+  componentDidMount(){
+    this.props.dispatch(actions.update(sessionStorage.email))
+  }
+
   render() {
-    if(!this.props.result.user){
+    if(!this.props.logged){
       return(
       <Redirect to="/" />
       )
     }
+
+    const history = this.props.data.history !== undefined ?  this.props.data.history: [];
+    const localtransaction = this.props.data.localtransaction !== undefined ?  this.props.data.localtransaction: [];
 
     return (
       <div className="membersite-form">
@@ -108,7 +139,7 @@ class MemberSite extends Component {
             value={this.state.value}
             onChange={this.handleChange}
           >
-            <Tab label="Transactions" value="transactions">
+            <Tab label="On stage" value="transactions">
               <div className="transactions-table">
               <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
@@ -119,6 +150,7 @@ class MemberSite extends Component {
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
                   {this.state.transactions.map((data,index)=>{
+                    if(index< this.state.indexPageTrans*5 && index >= (this.state.indexPageTrans-1)*5)
                     return(
                     <TableRow key={index}>
                       <TableRowColumn>{data.address}</TableRowColumn>
@@ -141,20 +173,23 @@ class MemberSite extends Component {
                 <RaisedButton onClick={this.handleSend} label="Send All" secondary={true} style={style} />
               </div>
             </Tab>
-            <Tab label="History" value="history">
+            <Tab label="Success History" value="history">
             <div className="transactions-table">
               <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                   <TableRow>
-                    <TableHeaderColumn>Type</TableHeaderColumn>
+                    <TableHeaderColumn>From</TableHeaderColumn>
+                    <TableHeaderColumn>To</TableHeaderColumn>
                     <TableHeaderColumn>KCoin</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                  {this.state.transactions.map((data,index)=>{
+                  {history.map((data,index)=>{
+                    if(index< this.state.indexPageHis*5 && index >= (this.state.indexPageHis-1)*5)
                     return(
                     <TableRow key={index}>
-                      <TableRowColumn>{data.address}</TableRowColumn>
+                      <TableRowColumn>{data.sender}</TableRowColumn>
+                      <TableRowColumn>{data.receiver}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
                     </TableRow>
                     )
@@ -203,7 +238,10 @@ const mapStateToProps = (state) =>{
     return {
       isSending: state.memberData.isSending,
       sent: state.memberData.sent,
+      data: state.memberData.data,
+
       result: state.signinData.result,
+      logged: state.signinData.logged
     }
 }
 

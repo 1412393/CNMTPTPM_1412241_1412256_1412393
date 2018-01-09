@@ -23,7 +23,8 @@ export function signin(email,password){
       const data = response.data;
       if(response && data.user){
         console.log(data)
-        sessionStorage.email = data.email;
+        sessionStorage.email = data.user.email;
+        sessionStorage.address = data.user.address;
         sessionStorage.isLogged = true;
         dispatch(signinSuccess(data))
       }
