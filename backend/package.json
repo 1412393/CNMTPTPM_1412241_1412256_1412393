@@ -16,6 +16,7 @@
     "chai": "~1.8.1",
     "compression": "^1.6.2",
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^2.0.1",
     "connect-multiparty": "^2.0.0",
     "cookie-parser": "~1.4.3",
     "crypto": "^1.0.1",

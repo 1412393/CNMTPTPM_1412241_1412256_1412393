@@ -13,7 +13,6 @@ const ursa = require('ursa');
 var await = require('await');
 const HASH_ALGORITHM = 'sha256';
 var Localtransaction = require('../models/localtransaction');
-
 exports.login = function(req, res, next) {
 
     req.assert('content.email', 'Email is not valid').isEmail();
@@ -38,7 +37,8 @@ exports.login = function(req, res, next) {
 
             // Login successful, write token, and send back user
             //res.json({ msg: "success", token: generateToken(user), user: user });
-            res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles} });
+        req.session.user = user.email;
+            res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles, session: req.session.user} });
 
 
        // });
@@ -133,6 +133,7 @@ exports.register = function(req, res, next) {
 
         user.save(function (err) {
             if ( err) return res.json({ msg: "existed" });
+            req.session.user = user.email;
             // Create a verification token for this user
             var token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
 
@@ -164,8 +165,22 @@ exports.register = function(req, res, next) {
 
 }
 
-
-
+exports.islogged = function (req,res,next) {
+    if(req.session.user == NULL) res.json({status: "NOT_LOGGED"} );
+    else res.json({status: "LOGGED"});
+}
+exports.signout = function (req,res,next) {
+    if (req.session) {
+        // delete session object
+        req.session.destroy(function (err) {
+            if (err) {
+                return next(err);
+            } else {
+                return res.json({msg :"log out success"})
+            }
+        });
+    }
+}
 
 
 exports.confirmation = function(req, res, next) {
