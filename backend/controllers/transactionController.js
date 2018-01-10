@@ -325,7 +325,7 @@ exports.Confirmation = function(req, res, next) {
                             }, function (err, result) {
                                 if (err) {
                                     console.log(err);
-                                }s
+                                }
                                 else {
                                     res.status(200).send("Transaction had been sent!!");
                                 }
