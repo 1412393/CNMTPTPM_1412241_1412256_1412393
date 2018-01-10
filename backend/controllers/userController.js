@@ -83,12 +83,7 @@ exports.updateData = function(req, res, next){
                                     lts.forEach((lt, index) => {
                                         localtran.push({id: lt.id, transaction: lt.transaction, state: lt.state, value: lt.value, outputs: lt.tran.outputs });
                                     });
-<<<<<<< HEAD
                                 res.json({ msg: "success",address:user.address.address, available_coins:user.available_coins, actual_coins:user.actual_coins, history: his, localtransaction: localtran} );
-=======
-                                res.json({ msg: "success",  address: user.address.address, available_coins:user.available_coins, actual_coins:user.actual_coins, history: his, localtransaction: localtran} );
->>>>>>> 1708c90e78a487da403f37c89ec86bfb173cd0c9
-                                //console.log({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles, history: his, localtransaction: localtran} });
                             }
                         });
 

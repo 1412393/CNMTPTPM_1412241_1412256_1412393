@@ -51,7 +51,7 @@ class MemberSite extends Component {
         indexPageRecent: 1,
         transactions:[],
         available: 0,
-        actual: 0,
+        detail: {}
       };
   }
 
@@ -89,7 +89,9 @@ class MemberSite extends Component {
     })
     console.log(this.state.transactions)
   }
-
+  handleRenew = () => {
+    this.props.dispatch(actions.update(sessionStorage.email))
+  }
   componentWillReceiveProps(nextProps){
     if(nextProps.sent === true){
       var transactions = this.state.transactions;
@@ -97,7 +99,7 @@ class MemberSite extends Component {
       let sent = this.state.transactions.reduce((a, b) => a + b, 0);
       this.setState({
         transactions: transactions,
-        actual: this.state.actual - sent
+        available: this.state.available - sent
       })
     }
 
@@ -109,16 +111,11 @@ class MemberSite extends Component {
       })
     }
 
-    if(nextProps.result.user.actual_coins !== this.props.result.user.actual_coins){
+    if(nextProps.data.available_coins){
       this.setState({
-        actual: nextProps.result.user.actual_coins
+        available: nextProps.data.available_coins
       })
-    }
-
-    if(nextProps.result.user.available_coins !== this.props.result.user.available_coins){
-      this.setState({
-        available: nextProps.result.user.available_coins
-      })
+      console.log(this.state.available)
     }
   }
 
@@ -132,7 +129,6 @@ class MemberSite extends Component {
       <Redirect to="/" />
       )
     }
-
     const actions = [
       <FlatButton
         label="OK"
@@ -143,7 +139,9 @@ class MemberSite extends Component {
 
     const history = this.props.data.history !== undefined ?  this.props.data.history: [];
     const localtransaction = this.props.data.localtransaction !== undefined ?  this.props.data.localtransaction: [];
-    
+    const address =  this.props.data.address !== undefined ?  this.props.data.address: "";
+    const actual_coins = this.props.data.actual_coins !== undefined ?  this.props.data.actual_coins: "";
+    const available_coins = this.props.data.available_coins !== undefined ?  this.props.data.available_coins: "";
 
     return (
       <div className="membersite-form">
@@ -151,11 +149,11 @@ class MemberSite extends Component {
             <div className="info-image"></div>
             <div className="address-data">
               <h6 id="email">{this.props.result.user.email}</h6>
-              <h6 id="address">Your address : {this.props.result.user.address}</h6>
+              <h6 id="address">Your address : {address}</h6>
             </div>
             <div className="kcoin-data">
-              <h6 id="actual">Actual KCoin: {this.props.result.user.actual_coins}</h6>
-              <h6 id="available">Available KCoin: {this.props.result.user.available_coins}</h6>
+              <h6 id="actual">Actual KCoin: {this.props.data.actual_coins}</h6>
+              <h6 id="available">Available KCoin: {this.state.available}</h6>
             </div>
         </div>
         <div className="trading-form">
@@ -185,7 +183,7 @@ class MemberSite extends Component {
                     </TableRow>
                     )
                   })}
-                  
+
                 </TableBody>
               </Table>
               </div>
@@ -221,7 +219,7 @@ class MemberSite extends Component {
                       <TableRowColumn>{data.sender}</TableRowColumn>
                       <TableRowColumn>{data.receiver}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
-                      <TableRowColumn><RaisedButton label="Detail" onClick={()=> this.setState({open:true})} style={{margin:1}} /></TableRowColumn>
+                      <TableRowColumn><RaisedButton label="Detail" onClick={()=> this.setState({open:true,detail: data})} style={{margin:1}} /></TableRowColumn>
                     </TableRow>
                     )
                   })}
@@ -239,14 +237,14 @@ class MemberSite extends Component {
             <div className="send-btn">
                 <RaisedButton onClick={this.handleRenew} label="Renew" secondary={true} style={style} />
             </div>
-              
+
             </Tab>
             <Tab label="Recent" value="recent">
             <div className="transactions-table">
               <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                   <TableRow>
-                    <TableHeaderColumn>To</TableHeaderColumn>
+                    <TableHeaderColumn>Type</TableHeaderColumn>
                     <TableHeaderColumn>KCoin</TableHeaderColumn>
                     <TableHeaderColumn>Status</TableHeaderColumn>
                   </TableRow>
@@ -256,7 +254,7 @@ class MemberSite extends Component {
                     if(index< this.state.indexPageRecent*5 && index >= (this.state.indexPageRecent-1)*5)
                     return(
                     <TableRow key={index}>
-                      <TableRowColumn>{"data.outputs"}</TableRowColumn>
+                      <TableRowColumn>{"Send"}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
                       <TableRowColumn>{data.state}</TableRowColumn>
                     </TableRow>
@@ -303,9 +301,9 @@ class MemberSite extends Component {
           open={this.state.open}
           >
           <div id="modal">
-              <span>fsdfasfs</span><br/>
-              <span>fsdfsdfdsf</span><br/>
-              <span>fsdfsfasdfsf</span><br/>
+              <span>From: {this.state.detail.sender}</span><br/>
+              <span>To: {this.state.detail.receiver}</span><br/>
+              <span>Value: {this.state.detail.value}</span><br/>
           </div>
           </Dialog>
         </MuiThemeProvider>
