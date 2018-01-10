@@ -19,7 +19,6 @@ import TextField from 'material-ui/TextField';
 import Pagination from 'material-ui-pagination';
 import { Redirect } from 'react-router-dom'
 
-
 const stylePaper = {
   height: 350,
   width: 400,
@@ -51,6 +50,7 @@ class MemberSite extends Component {
         indexPageRecent: 1,
         transactions:[],
         available: 0,
+        isFirstLoad: true,
         detail: {}
       };
   }
@@ -95,11 +95,17 @@ class MemberSite extends Component {
   componentWillReceiveProps(nextProps){
     if(nextProps.sent === true){
       var transactions = this.state.transactions;
+      var available = this.state.available;
       transactions.forEach((item) => item.status = "Success");
-      let sent = this.state.transactions.reduce((a, b) => a + b, 0);
+      var sent = 0;
+      for(let i= 0;i<transactions.length;i++){
+        sent += transactions[i].value;
+      }
+      console.log(sent)
+      available -= sent;
       this.setState({
         transactions: transactions,
-        available: this.state.available - sent
+        available: available
       })
     }
 
@@ -111,11 +117,11 @@ class MemberSite extends Component {
       })
     }
 
-    if(nextProps.data.available_coins){
+    if(nextProps.data.available_coins && this.state.isFirstLoad){
       this.setState({
-        available: nextProps.data.available_coins
+        available: nextProps.data.available_coins,
+        isFirstLoad: false,
       })
-      console.log(this.state.available)
     }
   }
 
