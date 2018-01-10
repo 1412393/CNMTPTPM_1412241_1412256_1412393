@@ -42,7 +42,7 @@ function updateStart(){
   function updateFail(message){
     return {type : "UPDATE_FAIL", message: message}
   }
-  
+
   export function update(email){
     const content = {
         email: email

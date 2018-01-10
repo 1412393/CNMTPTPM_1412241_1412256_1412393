@@ -37,7 +37,8 @@ exports.login = function(req, res, next) {
 
             // Login successful, write token, and send back user
             //res.json({ msg: "success", token: generateToken(user), user: user });
-        req.session.user = user.email;
+            req.session.user = user.email;
+            console.log(req.session.user);
             res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles, session: req.session.user} });
 
 
@@ -47,7 +48,7 @@ exports.login = function(req, res, next) {
 
 
 exports.updateData = function(req, res, next){
-    User.findOne({ email: req.session.user }, function(err, user) {
+    User.findOne({ email: req.body.content.eamil }, function(err, user) {
         if (!user) return res.json({ msg: "notexist" });
 
         // Make sure the user has been verified

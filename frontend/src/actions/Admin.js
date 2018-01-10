@@ -17,7 +17,7 @@ export function renew(){
   }
   return dispatch => {
     dispatch(renewStart())
-    axios.post(apiUrl +'admin/manage')
+    axios.post(apiUrl +'admin/manage',{content})
     .then(response => {
       const data = response.data;
       if(response && data.msg === "success"){
