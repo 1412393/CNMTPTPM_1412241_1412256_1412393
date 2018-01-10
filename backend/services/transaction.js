@@ -36,7 +36,8 @@ exports.AddTransaction = async function (data) {
                                     else if (user !== null) {
                                         console.log(user.actual_coins + " " + tt.value);
                                         await(user.update({
-                                            actual_coins: user.actual_coins + tt.value
+                                            actual_coins: user.actual_coins + tt.value,
+                                            available_coins: user.available_coins + tt.value
                                         }, function (err, result) {
                                             if (err) {
                                                 console.log(err);

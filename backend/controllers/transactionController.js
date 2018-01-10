@@ -343,7 +343,7 @@ exports.Confirmation = function(req, res, next) {
 }
 
 
-exports.Cancle = function(req, res, next) {
+exports.Cancel = function(req, res, next) {
     let id = req.params.id;
     User.findOne({ "email": req.body.content.email }, function(err, user) {
         if (!user) return res.json({ msg: "notexist" });
