@@ -87,14 +87,14 @@ ws.onmessage = async function (data) {
     if (d.type === "block"){
         await block.AddBlock(d.data);
     }
-    else
-    if (d.type === "transaction"){
-        await transaction.AddTransaction(d.data);
-    }
-};
+    //else
+    //if (d.type === "transaction"){
+    //    await transaction.AddTransaction(d.data);
+    //}
+};*/
 
-*/
-
+var userController = require("./controllers/userController");
+   // userController.initUser();
 //appp.InitData();
 
 //transaction.InitHistory();

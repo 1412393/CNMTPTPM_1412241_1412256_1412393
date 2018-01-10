@@ -12,6 +12,8 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Pagination from 'material-ui-pagination';
@@ -45,6 +47,8 @@ class AdminSite extends Component {
         stage: "transactions",
         indexPageTrans: 1,
         indexPageHis: 1,
+        open: false,
+        detail: {}
       };
   }
 
@@ -68,7 +72,13 @@ class AdminSite extends Component {
       <Redirect to="/" />
       )
     }
-
+    const actions = [
+      <FlatButton
+        label="OK"
+        primary={true}
+        onClick={() => this.setState({open:false})}
+      />,
+    ];
     const {amount_actual_coin,amount_available_coin,amount_user} = this.props.data.info !== undefined ? this.props.data.info : "";
     const users = this.props.data.users !== undefined ? this.props.data.users : [];
     const history = this.props.data.localhtr !== undefined ? this.props.data.localhtr : [];
@@ -133,6 +143,7 @@ class AdminSite extends Component {
                     <TableHeaderColumn>From</TableHeaderColumn>
                     <TableHeaderColumn>To</TableHeaderColumn>
                     <TableHeaderColumn>KCoin</TableHeaderColumn>
+                    <TableHeaderColumn>Detail</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
@@ -143,6 +154,7 @@ class AdminSite extends Component {
                       <TableRowColumn>{data.sender}</TableRowColumn>
                       <TableRowColumn>{data.receiver}</TableRowColumn>
                       <TableRowColumn>{data.value}</TableRowColumn>
+                      <TableRowColumn><RaisedButton label="Detail" onClick={()=> this.setState({open:true,detail: data})} style={{margin:1}} /></TableRowColumn>
                     </TableRow>
                     )
                   })}
@@ -164,6 +176,18 @@ class AdminSite extends Component {
         <div className="logout-btn">
         <MuiThemeProvider>
           <RaisedButton onClick={() => window.location = "/"} label="Logout" primary={true} style={style} />
+          <Dialog
+          title="Transaction Detail"
+          actions={actions}
+          modal={true}
+          open={this.state.open}
+          >
+          <div id="modal">
+              <span>From: {this.state.detail.sender}</span><br/>
+              <span>To: {this.state.detail.receiver}</span><br/>
+              <span>Value: {this.state.detail.value}</span><br/>
+          </div>
+          </Dialog>
         </MuiThemeProvider>
         </div>
       </div>
