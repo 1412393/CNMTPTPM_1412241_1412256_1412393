@@ -58,8 +58,24 @@ class AdminSite extends Component {
     });
   };
 
-  handleRenew = () =>{
-
+  renderDialog = () =>{
+    if(this.state.detail.transaction !== undefined)
+    return(
+      <div id="modal">
+      <span>Transaction Hash: {this.state.detail.transaction}</span><br/>
+      <span>From: {this.state.detail.sender}</span><br/>
+      <span>To: {this.state.detail.receiver}</span><br/>
+      <span>Value: {this.state.detail.value}</span><br/>
+      </div>
+    )
+    else return(
+      <div id="modal">
+        <span>Email: {this.state.detail.email}</span><br/>
+        <span>Address: {this.state.detail.address}</span><br/>
+        <span>Actual KCoin: {this.state.detail.actual_coins}</span><br/>
+        <span>Available KCoin: {this.state.detail.available_coins}</span><br/>
+      </div>
+    )
   }
 
   componentDidMount(){
@@ -81,7 +97,7 @@ class AdminSite extends Component {
     ];
     const {amount_actual_coin,amount_available_coin,amount_user} = this.props.data.info !== undefined ? this.props.data.info : "";
     const users = this.props.data.users !== undefined ? this.props.data.users : [];
-    const history = this.props.data.localhtr !== undefined ? this.props.data.localhtr : [];
+    const history = this.props.data.history !== undefined ? this.props.data.history : [];
     return (
       <div className="adminsite-form">
         <div className="info-form">
@@ -110,6 +126,7 @@ class AdminSite extends Component {
                     <TableHeaderColumn>Available</TableHeaderColumn>
                     <TableHeaderColumn>Email</TableHeaderColumn>
                     <TableHeaderColumn>Address</TableHeaderColumn>
+                    <TableHeaderColumn>Detail</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
@@ -120,6 +137,7 @@ class AdminSite extends Component {
                       <TableRowColumn>{data.available_coins}</TableRowColumn>
                       <TableRowColumn>{data.email}</TableRowColumn>
                       <TableRowColumn>{data.address}</TableRowColumn>
+                      <TableRowColumn><RaisedButton label="Detail" onClick={()=> this.setState({open:true,detail: data})} style={{margin:1}} /></TableRowColumn>
                     </TableRow>
                     )
                   })}
@@ -163,9 +181,9 @@ class AdminSite extends Component {
             </div>
             <div className="membersite-pagination">
             <Pagination
-                total = { 3 }
+                total = { 8 }
                 current = { this.state.indexPageHis }
-                display = { 3 }
+                display = { 8 }
                 onChange = { indexPageHis => this.setState({ indexPageHis }) }
             />
             </div>
@@ -177,16 +195,12 @@ class AdminSite extends Component {
         <MuiThemeProvider>
           <RaisedButton onClick={() => window.location = "/"} label="Logout" primary={true} style={style} />
           <Dialog
-          title="Transaction Detail"
-          actions={actions}
-          modal={true}
-          open={this.state.open}
-          >
-          <div id="modal">
-              <span>From: {this.state.detail.sender}</span><br/>
-              <span>To: {this.state.detail.receiver}</span><br/>
-              <span>Value: {this.state.detail.value}</span><br/>
-          </div>
+            title= {this.state.detail.transaction !== undefined ? "Transaction Detail" : "User Detail" }
+            actions={actions}
+            modal={true}
+            open={this.state.open}
+            >
+              {this.renderDialog()}
           </Dialog>
         </MuiThemeProvider>
         </div>
