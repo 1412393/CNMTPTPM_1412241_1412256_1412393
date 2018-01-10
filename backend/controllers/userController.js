@@ -13,6 +13,9 @@ const ursa = require('ursa');
 var await = require('await');
 const HASH_ALGORITHM = 'sha256';
 var Localtransaction = require('../models/localtransaction');
+
+var transactionController = require("../controllers/transactionController");
+
 exports.login = function(req, res, next) {
 
     req.assert('content.email', 'Email is not valid').isEmail();
@@ -48,7 +51,7 @@ exports.login = function(req, res, next) {
 
 
 exports.updateData = function(req, res, next){
-    User.findOne({ email: req.body.content.eamil }, function(err, user) {
+    User.findOne({ email: req.body.content.email }, function(err, user) {
         if (!user) return res.json({ msg: "notexist" });
 
         // Make sure the user has been verified
@@ -283,7 +286,7 @@ function Cal(add) {
 
 };
 
-exports.CalCoin = async function () {
+exports.CalCoin = async function() {
 
     await User.find({}, function(err, users) {
         if (err) {
@@ -294,27 +297,19 @@ exports.CalCoin = async function () {
             await(users.forEach((user, index) => {
 
                 //let c = await (Cal(user.address.address));
-
                 History.find({ 'receiver': user.address.address }, function(err, histories1) {
                     if (err) {
                     }
                     else
                     {
-                        History.find({ 'sender': user.address.address }, function(err, histories2) {
-                            if (err) {
-                            }
-                            else
-                            {
+
                                 let c=0;
                                 if (histories1!=null)
                                 histories1.forEach((history, index) => {
                                     c+=history.value;
                                 });
 
-                                if (histories2!=null)
-                                histories2.forEach((history, index) => {
-                                    c-=history.value;
-                                });
+
                                 await(user.update({
                                     actual_coins: c,
                                     available_coins: c
@@ -326,8 +321,7 @@ exports.CalCoin = async function () {
 
                                     }
                                 }));
-                            }
-                        });
+
                     }
                 });
                 //console.log(c);
@@ -348,7 +342,67 @@ exports.CalCoin = async function () {
             return;
         }
     });
+    await Transaction.find({}, function(err, transactions) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        if (transactions !== null) {
+            //console.log(transactions.length )
+            await(transactions.forEach((transaction, index) => {
+                //await for (let transaction of transactions) {
+                //console.log(transaction.inputs.length );
+                //if (transaction.inputs.length < 1) console.log(transaction + " " + index);
+                //sender = "";
+                await(Transaction.findOne({'hash': transaction.inputs[0].referencedOutputHash}, function (err, t) {
+
+                    if (err) {
+
+                    }
+                    else if (t !== null) {
+                        let sender = (t.outputs[transaction.inputs[0].referencedOutputIndex].lockScript.replace('ADD ', ''));
+                        await(transaction.inputs.forEach((tt, i) => {
+                            await(Transaction.findOne({'hash': tt.referencedOutputHash}, function (err, ttt) {
+
+                                if (err) {
+
+                                }
+                                else if (ttt !== null) {
+                                    let c = ttt.outputs[tt.referencedOutputIndex].value;
+                                    await (User.findOne({'address.address': sender}, function (err, user) {
+                                        if (err) {
+
+                                        }
+                                        else if (user != null) {
+
+                                            let ac = user.actual_coins - c;
+                                            (user.update({
+                                                actual_coins: user.actual_coins - c,
+                                                available_coins: user.available_coins - c
+                                            }, function (err, result) {
+                                                if (err) {
+                                                    console.log(err);
+                                                }
+                                                else {
+                                                }
+                                            }));
+                                        }
+                                    }));
+                                }
+                            }));
+                        }));
+                    }
+                }));
+            }));
+        }
+        else {
+                return;
+            }
+        });
+
+
     console.log("cal done!");
+    transactionController.CheckTran2();
 }
 function CountUser()
 {
