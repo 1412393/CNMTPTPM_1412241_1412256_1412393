@@ -100,6 +100,3 @@ exports.manage = function(req,res,next) {
         });
     });
 }
-
-
-

@@ -40,7 +40,8 @@ exports.login = function(req, res, next) {
 
             // Login successful, write token, and send back user
             //res.json({ msg: "success", token: generateToken(user), user: user });
-        req.session.user = user.email;
+            req.session.user = user.email;
+            console.log(req.session.user);
             res.json({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles, session: req.session.user} });
 
 
@@ -50,7 +51,7 @@ exports.login = function(req, res, next) {
 
 
 exports.updateData = function(req, res, next){
-    User.findOne({ email: req.body.content.email }, function(err, user) {
+    User.findOne({ email: req.body.content.eamil }, function(err, user) {
         if (!user) return res.json({ msg: "notexist" });
 
         // Make sure the user has been verified
@@ -86,8 +87,7 @@ exports.updateData = function(req, res, next){
                                     lts.forEach((lt, index) => {
                                         localtran.push({id: lt.id, transaction: lt.transaction, state: lt.state, value: lt.value, outputs: lt.tran.outputs });
                                     });
-                                res.json({ msg: "success",  address: user.address.address, available_coins:user.available_coins, actual_coins:user.actual_coins, history: his, localtransaction: localtran} );
-                                //console.log({ msg: "success",  user: {email:user.email, available_coins:user.available_coins, actual_coins:user.actual_coins, address:user.address.address, role:user.roles, history: his, localtransaction: localtran} });
+                                res.json({ msg: "success",address:user.address.address, available_coins:user.available_coins, actual_coins:user.actual_coins, history: his, localtransaction: localtran} );
                             }
                         });
 

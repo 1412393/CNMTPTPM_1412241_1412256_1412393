@@ -12,9 +12,12 @@ function renewFail(message){
 }
 
 export function renew(){
+  const content = {
+    email: sessionStorage.email
+  }
   return dispatch => {
     dispatch(renewStart())
-    axios.get(apiUrl +'admin/manage')
+    axios.post(apiUrl +'admin/manage',{content})
     .then(response => {
       const data = response.data;
       if(response && data.msg === "success"){
