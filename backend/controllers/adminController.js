@@ -22,7 +22,7 @@ function jsonConcat(o1, o2) {
 }
 
 exports.manage = function(req,res,next) {
-    User.findOne({ email: req.body.content.email}, function(err, user) {
+    User.findOne({ email: req.session.user}, function(err, user) {
         if (err) { return  }
 
         if (!user) {
