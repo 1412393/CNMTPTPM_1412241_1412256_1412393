@@ -47,7 +47,7 @@ exports.login = function(req, res, next) {
 
 
 exports.updateData = function(req, res, next){
-    User.findOne({ email: req.body.content.email }, function(err, user) {
+    User.findOne({ email: req.session.user }, function(err, user) {
         if (!user) return res.json({ msg: "notexist" });
 
         // Make sure the user has been verified
