@@ -34,47 +34,51 @@ exports.AddTransaction = async function (data) {
                                     if (err) {
                                     }
                                     else if (user !== null) {
-                                        let ac = user.actual_coins + tt.value;
-                                        //let av = user.available_coins + tt.value;
                                         console.log(user.actual_coins + " " + tt.value);
                                         await(user.update({
-                                            actual_coins: ac
+                                            actual_coins: user.actual_coins + tt.value
                                         }, function (err, result) {
                                             if (err) {
                                                 console.log(err);
                                             }
-                                            else {
-                                                console.log(ac + "nhan " + av);
-                                                await(User.findOne({'address.address': sender}, function (err, user) {
-                                                    if (err) {
-                                                    }
-                                                    else if (user !== null) {
 
-                                                        let ac = user.actual_coins - tt.value;
-                                                        //let av = user.available_coins - tt.value;
-                                                        console.log(user.actual_coins + " " + tt.value);
-                                                        await(user.update({
-                                                            actual_coins: ac,
-                                                            canSend: true,
-                                                        }, function (err, result) {
-                                                            if (err) {
-                                                                console.log(err);
-                                                            }
-                                                            else {
-                                                                console.log(ac + "chuyen " + av);
-                                                                return;
-                                                            }
-                                                        }));
-                                                    }
-                                                }));
-                                            }
                                         }));
-
                                     }
                                 }));
                             }
                         }));
 
+                    }));
+
+                    await(transaction.inputs.forEach((tt, i) => {
+                        await(Transaction.findOne({'hash': tt.referencedOutputHash}, function (err, ttt) {
+
+                            if (err) {
+
+                            }
+                            else if (ttt !== null) {
+                                let c = ttt.outputs[tt.referencedOutputIndex].value;
+                                await (User.findOne({'address.address': sender}, function (err, user) {
+                                    if (err) {
+
+                                    }
+                                    else if (user != null) {
+
+                                        let ac = user.actual_coins - c;
+                                        (user.update({
+                                            actual_coins: user.actual_coins - c,
+                                            available_coins: user.available_coins - c
+                                        }, function (err, result) {
+                                            if (err) {
+                                                console.log(err);
+                                            }
+                                            else {
+                                            }
+                                        }));
+                                    }
+                                }));
+                            }
+                        }));
                     }));
                 }
             }));

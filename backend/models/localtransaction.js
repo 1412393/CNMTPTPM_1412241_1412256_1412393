@@ -8,6 +8,7 @@ var LocaltransactionSchema = Schema({
     transaction: String,
     state:  { type: String, default: 'init' },
     value: Number,
+    sum: Number,
     tran:{
         inputs:[
             {

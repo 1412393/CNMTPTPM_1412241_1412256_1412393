@@ -78,7 +78,8 @@ exports.sendCoin = function(req, res, next) {
                     sender: sender.address,
                     transaction: "",
                     value: sc,
-                    tran:jsonO
+                    tran:jsonO,
+                    sum:sum
                 });
                 l.save(function (err) {
                     if (err){ return}
@@ -237,6 +238,49 @@ async function CheckTran(){
     });
 }
 
+
+exports.CheckTran2 = async function(){
+
+    await Transaction.find({}, function(err, transactions) {
+        if (err) {
+            return;
+        }
+        if (transactions !== null) {
+            await (transactions.forEach((transaction, index) => {
+                await (transaction.inputs.forEach((input, i) => {
+                    //if (input.referencedOutputHash == "f3d218bad02b3d8069a46e8020de8ef620e1b03f5fa904061499631a94a1b985" && input.referencedOutputIndex== 1)
+                    //    console.log("cc");
+                    History.findOne({ 'transaction': input.referencedOutputHash, 'outputindex':input.referencedOutputIndex, 'used': false }, function(err, history) {
+                        if (err) {
+                        }
+                        else if (history!==null) {
+
+                            await(history.update({
+                                used: true
+                            }, function (err, result) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                                else {
+                                }
+                            }));
+                        }
+
+                    });
+
+                }));
+            }));
+
+
+        }
+
+
+        else {
+            return;
+        }
+    });
+}
+
 exports.Confirmation = function(req, res, next) {
     let id = req.params.id;
     //res.status(200).send("Transaction had been sent!!");
@@ -262,7 +306,7 @@ exports.Confirmation = function(req, res, next) {
                 }
 
                 if (response.body.hash){
-                    let avc = user.available_coins - sc;
+                    //let avc = user.available_coins - lt.sum;
                     lt.update({
                         state: "processing",
                         transaction: response.body.hash
@@ -271,15 +315,21 @@ exports.Confirmation = function(req, res, next) {
                             console.log(err);
                         }
                     });
-                    user.update({
-                        available_coins: avc,
-                        canSend: false
-                    }, function (err, result) {
+                    User.findOne({ "address.address" : lt.sender }, function(err, user) {
                         if (err) {
-                            console.log(err);
                         }
-                        else {
-                            res.status(200).send("Transaction had been sent!!");
+                        else if (user) {
+                            user.update({
+                                available_coins: user.available_coins - lt.sum,
+                                canSend: false
+                            }, function (err, result) {
+                                if (err) {
+                                    console.log(err);
+                                }s
+                                else {
+                                    res.status(200).send("Transaction had been sent!!");
+                                }
+                            });
                         }
                     });
 
@@ -295,7 +345,7 @@ exports.Confirmation = function(req, res, next) {
 
 exports.Cancle = function(req, res, next) {
     let id = req.params.id;
-    User.findOne({ email: req.body.content.email }, function(err, user) {
+    User.findOne({ "email": req.body.content.email }, function(err, user) {
         if (!user) return res.json({ msg: "notexist" });
 
         // Make sure the user has been verified

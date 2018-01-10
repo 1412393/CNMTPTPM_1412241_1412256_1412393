@@ -72,12 +72,12 @@ const WebSocket = require('ws');
 
 const ws = new WebSocket('wss://api.kcoin.club/');
 
-//ws.onopen = function () {
+ws.onopen = function () {
  //   console.log('connected');
-//};
+};
 //var await = require('await');
 
-/*ws.onmessage = async function (data) {
+ws.onmessage = async function (data) {
     //console.log('incoming data', data.data);
 }
 ws.onmessage = async function (data) {
@@ -91,25 +91,18 @@ ws.onmessage = async function (data) {
     //if (d.type === "transaction"){
     //    await transaction.AddTransaction(d.data);
     //}
-};*/
+};
 
 var userController = require("./controllers/userController");
    // userController.initUser();
+userController.CalCoin();
 //appp.InitData();
 
 //transaction.InitHistory();
 
 var transactionController = require("./controllers/transactionController");
-let sender = {
-    "address" : "14c68e95b1238c97bdf3d777611e296c3246765ba95533fdde5a40e275f627f2",
-    "available_coins": 9999
-}
 
-let receivers = [{
-    "address" : "35da0a0c1dc4f61834359c62873f9647e848126c3941a8e5fe25799b61e7844f",
-    "value": 1
-}]
-//transactionController.PostTransaction(sender, receivers);
+
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
